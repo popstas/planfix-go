@@ -1,0 +1,9 @@
+language: go
+go:
+  - master
+before_install:
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
+script:
+  - go test -coverprofile=planfix.coverprofile ./planfix
+  - goveralls -coverprofile=planfix.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN

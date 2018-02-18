@@ -39,10 +39,9 @@ func (s *MockedServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 
 func newApi(fixtureFileName string) planfix.Api {
 	ms := NewMockedServer(fixtureFileName)
-	return planfix.Api{
-		Url: ms.URL,
-		Sid: "123",
-	}
+	api := planfix.New(ms.URL, "apiKey", "account", "user", "password")
+	api.Sid = "123"
+	return api
 }
 
 func TestApi_ErrorCode(t *testing.T) {
