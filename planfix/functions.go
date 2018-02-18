@@ -1,9 +1,9 @@
 package planfix
 
 import (
-	"log"
 	"errors"
 	"fmt"
+	"log"
 )
 
 // auth.login
@@ -87,6 +87,97 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 
 	if responseStruct.Status == "error" {
 		return XmlResponseActionGetList{}, errors.New(fmt.Sprintf(
+			"Planfix request to %s failed: %s",
+			requestStruct.Method,
+			a.getErrorByCode(responseStruct.Code)))
+	}
+
+	return *responseStruct, nil
+}
+
+// analitic.getList
+func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
+	a.ensureAuthenticated()
+	requestStruct := XmlRequestAnaliticGetList{
+		Method:          "analitic.getList",
+		Account:         a.Account,
+		Sid:             a.Sid,
+		AnaliticGroupId: groupId,
+	}
+	responseStruct := new(XmlResponseAnaliticGetList)
+
+	err := a.apiRequest(requestStruct, responseStruct)
+	if err != nil {
+		log.Printf("[ERROR] %v", err)
+		return XmlResponseAnaliticGetList{}, err
+	}
+
+	if responseStruct.Status == "error" {
+		return XmlResponseAnaliticGetList{}, errors.New(fmt.Sprintf(
+			"Planfix request to %s failed: %s",
+			requestStruct.Method,
+			a.getErrorByCode(responseStruct.Code)))
+	}
+
+	return *responseStruct, nil
+}
+
+// action.add
+// TODO: не находит задачу, код 3001 - https://tagilcity.planfix.ru/task/530277
+func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd, error) {
+	a.ensureAuthenticated()
+
+	// only task or contact allowed
+	if (requestStruct.TaskId > 0 || requestStruct.TaskGeneral > 0) && requestStruct.ContactGeneral > 0 {
+		return XmlResponseActionAdd{}, errors.New("Both task and contact defined")
+	}
+
+	// defaults
+	requestStruct.Method = "action.add"
+	if requestStruct.Account == "" {
+		requestStruct.Account = a.Account
+	}
+	if requestStruct.Sid == "" {
+		requestStruct.Sid = a.Sid
+	}
+
+	responseStruct := new(XmlResponseActionAdd)
+
+	err := a.apiRequest(requestStruct, responseStruct)
+	if err != nil {
+		log.Printf("[ERROR] %v", err)
+		return XmlResponseActionAdd{}, err
+	}
+
+	if responseStruct.Status == "error" {
+		return XmlResponseActionAdd{}, errors.New(fmt.Sprintf(
+			"Planfix request to %s failed: %s",
+			requestStruct.Method,
+			a.getErrorByCode(responseStruct.Code)))
+	}
+
+	return *responseStruct, nil
+}
+
+// task.get
+func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
+	a.ensureAuthenticated()
+	requestStruct := XmlRequestTaskGet{
+		Method:      "task.get",
+		Account:     a.Account,
+		Sid:         a.Sid,
+		TaskId:      taskId,
+		TaskGeneral: taskGeneral,
+	}
+	responseStruct := new(XmlResponseTaskGet)
+
+	err := a.apiRequest(requestStruct, responseStruct)
+	if err != nil {
+		return XmlResponseTaskGet{}, err
+	}
+
+	if responseStruct.Status == "error" {
+		return XmlResponseTaskGet{}, errors.New(fmt.Sprintf(
 			"Planfix request to %s failed: %s",
 			requestStruct.Method,
 			a.getErrorByCode(responseStruct.Code)))

@@ -25,38 +25,63 @@ type XmlResponseFile struct {
 }
 
 type XmlResponseUser struct {
-	Id   int    `xml:"id"`
-	Name string `xml:"name"`
+	Id   int    `xml:"id,omitempty"`
+	Name string `xml:"name,omitempty"`
 }
 
-type XmlResponseAnalitic struct {
+type XmlResponseActionAnalitic struct {
 	Id   int    `xml:"id"`
 	Key  int    `xml:"key"`
 	Name string `xml:"name"`
 }
 
 type XmlResponseAction struct {
-	Id                           int                   `xml:"id"`
-	Description                  string                `xml:"description"`
-	OldStatus                    int                   `xml:"statusChange>oldStatus,omitempty"`
-	NewStatus                    int                   `xml:"statusChange>newStatus,omitempty"`
-	IsNotRead                    bool                  `xml:"isNotRead"`
-	FromEmail                    bool                  `xml:"fromEmail"`
-	DateTime                     string                `xml:"dateTime"`
-	TaskId                       int                   `xml:"task>id"`
-	TaskTitle                    string                `xml:"task>title"`
-	ContactGeneral               int                   `xml:"contact>general"`
-	ContactName                  string                `xml:"contact>name"`
-	Owner                        XmlResponseUser       `xml:"owner"`
-	ProjectId                    int                   `xml:"project>id"`
-	ProjectTitle                 string                `xml:"project>title"`
-	TaskExpectDateChangedOldDate string                `xml:"taskExpectDateChanged>oldDate"`
-	TaskExpectDateChangedNewDate string                `xml:"taskExpectDateChanged>newDate"`
-	TaskStartTimeChangedOldDate  string                `xml:"taskStartTimeChanged>oldDate"`
-	TaskStartTimeChangedNewDate  string                `xml:"taskStartTimeChanged>newDate"`
-	Files                        []XmlResponseFile     `xml:"files>file"`
-	NotifiedList                 []XmlResponseUser     `xml:"notifiedList>user"`
-	Analitics                    []XmlResponseAnalitic `xml:"analitics>analitic"`
+	Id                           int                         `xml:"id"`
+	Description                  string                      `xml:"description"`
+	OldStatus                    int                         `xml:"statusChange>oldStatus,omitempty"`
+	NewStatus                    int                         `xml:"statusChange>newStatus,omitempty"`
+	IsNotRead                    bool                        `xml:"isNotRead"`
+	FromEmail                    bool                        `xml:"fromEmail"`
+	DateTime                     string                      `xml:"dateTime"`
+	TaskId                       int                         `xml:"task>id"`
+	TaskTitle                    string                      `xml:"task>title"`
+	ContactGeneral               int                         `xml:"contact>general"`
+	ContactName                  string                      `xml:"contact>name"`
+	Owner                        XmlResponseUser             `xml:"owner"`
+	ProjectId                    int                         `xml:"project>id"`
+	ProjectTitle                 string                      `xml:"project>title"`
+	TaskExpectDateChangedOldDate string                      `xml:"taskExpectDateChanged>oldDate"`
+	TaskExpectDateChangedNewDate string                      `xml:"taskExpectDateChanged>newDate"`
+	TaskStartTimeChangedOldDate  string                      `xml:"taskStartTimeChanged>oldDate"`
+	TaskStartTimeChangedNewDate  string                      `xml:"taskStartTimeChanged>newDate"`
+	Files                        []XmlResponseFile           `xml:"files>file"`
+	NotifiedList                 []XmlResponseUser           `xml:"notifiedList>user"`
+	Analitics                    []XmlResponseActionAnalitic `xml:"analitics>analitic"`
+}
+
+// TODO: добавить все поля из https://planfix.ru/docs/ПланФикс_API_task.get
+type XmlResponseTask struct {
+	Id           int    `xml:"id"`
+	Title        string `xml:"title"`
+	Description  string `xml:"description"`
+	General      int    `xml:"general"`
+	ProjectId    int    `xml:"project>id"`
+	ProjectTitle string `xml:"project>title"`
+}
+
+type XmlResponseAnalitic struct {
+	Id        int    `xml:"id"`
+	Name      string `xml:"name"`
+	GroupId   int    `xml:"group>id"`
+	GroupName string `xml:"group>name"`
+}
+
+type XmlRequestAnalitic struct {
+	Id       int `xml:"id"`
+	ItemData struct {
+		FieldId int    `xml:"fieldId"`
+		Value   string `xml:"value"`
+	} `xml:"itemData"`
 }
 
 // auth.login
@@ -114,9 +139,6 @@ type XmlRequestActionGetList struct {
 	Sort           string `xml:"sort"`
 }
 
-type XmlResponseActions struct {
-}
-
 // action.getList response
 type XmlResponseActionGetList struct {
 	XMLName xml.Name `xml:"response"`
@@ -129,4 +151,78 @@ type XmlResponseActionGetList struct {
 		ActionsTotalCount int                 `xml:"totalCount,attr"`
 		Actions           []XmlResponseAction `xml:"action"`
 	} `xml:"actions"`
+}
+
+// action.add
+type XmlRequestActionAdd struct {
+	XMLName xml.Name `xml:"request"`
+	Method  string   `xml:"method,attr"`
+	Account string   `xml:"account"`
+	Sid     string   `xml:"sid"`
+
+	Description    string               `xml:"description"`
+	TaskId         int                  `xml:"task>id,omitempty"`
+	TaskGeneral    int                  `xml:"task>general,omitempty"`
+	ContactGeneral int                  `xml:"contact>general,omitempty"`
+	TaskNewStatus  int                  `xml:"taskNewStatus,omitempty"`
+	NotifiedList   []XmlResponseUser    `xml:"notifiedList>user,omitempty"`
+	IsHidden       bool                 `xml:"isHidden"`
+	Owner          XmlResponseUser      `xml:"owner,omitempty"`
+	DateTime       string               `xml:"dateTime,omitempty"`
+	Analitics      []XmlRequestAnalitic `xml:"analitics>analitic,omitempty"`
+}
+
+// action.add response
+type XmlResponseActionAdd struct {
+	XMLName xml.Name `xml:"response"`
+	Status  string   `xml:"status,attr"`
+	Code    string   `xml:"code"`
+	Message string   `xml:"message"`
+
+	ActionId int `xml:"action>id"`
+}
+
+// analitic.getList
+type XmlRequestAnaliticGetList struct {
+	XMLName xml.Name `xml:"request"`
+	Method  string   `xml:"method,attr"`
+	Account string   `xml:"account"`
+	Sid     string   `xml:"sid"`
+
+	AnaliticGroupId int `xml:"analiticGroupId,omitempty"`
+}
+
+// analitic.getList response
+type XmlResponseAnaliticGetList struct {
+	XMLName xml.Name `xml:"response"`
+	Status  string   `xml:"status,attr"`
+	Code    string   `xml:"code"`
+	Message string   `xml:"message"`
+
+	Analitics struct {
+		AnaliticsCount      int                   `xml:"count,attr"`
+		AnaliticsTotalCount int                   `xml:"totalCount,attr"`
+		Analitics           []XmlResponseAnalitic `xml:"analitic"`
+	} `xml:"analitics"`
+}
+
+// task.get
+type XmlRequestTaskGet struct {
+	XMLName xml.Name `xml:"request"`
+	Method  string   `xml:"method,attr"`
+	Account string   `xml:"account"`
+	Sid     string   `xml:"sid"`
+
+	TaskId      int `xml:"task>id,omitempty"`
+	TaskGeneral int `xml:"task>general,omitempty"`
+}
+
+// task.get response
+type XmlResponseTaskGet struct {
+	XMLName xml.Name `xml:"response"`
+	Status  string   `xml:"status,attr"`
+	Code    string   `xml:"code"`
+	Message string   `xml:"message"`
+
+	Task XmlResponseTask `xml:"task"`
 }

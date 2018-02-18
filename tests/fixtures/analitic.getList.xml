@@ -1,0 +1,20 @@
+<response status="ok">
+    <analitics totalCount="2" count="2">
+        <analitic>
+            <id>330</id>
+            <name>Продажа</name>
+            <group>
+                <id>14</id>
+                <name>Продажи и маркетинг</name>
+            </group>
+        </analitic>
+        <analitic>
+            <id>263</id>
+            <name>Выработка</name>
+            <group>
+                <id>1</id>
+                <name>Управление временем</name>
+            </group>
+        </analitic>
+    </analitics>
+</response>

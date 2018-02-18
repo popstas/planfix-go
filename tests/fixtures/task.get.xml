@@ -1,0 +1,96 @@
+<response status="ok">
+    <task>
+        <id>1128468</id>
+        <title>Интеграция с toggl</title>
+        <description>&lt;p&gt;Выработка должна попадать из toggl в планфикс сама.&lt;br/&gt;</description>
+        <importance>AVERAGE</importance>
+        <status>4</status>
+        <statusSet>2</statusSet>
+        <checkResult>1</checkResult>
+        <owner>
+            <id>9230</id>
+            <name>Станислав Попов</name>
+        </owner>
+        <parent>
+            <id>0</id>
+        </parent>
+        <template>
+            <id>61566</id>
+        </template>
+        <project>
+            <id>9830</id>
+            <title>Стандартизация и технические решения</title>
+        </project>
+        <client>
+            <id>0</id>
+            <name></name>
+        </client>
+        <beginDateTime>03-02-2018 17:09</beginDateTime>
+        <startTime>03-02-2018</startTime>
+        <endTime>05-03-2018</endTime>
+        <general>525330</general>
+        <isOverdued>0</isOverdued>
+        <isCloseToDeadline>0</isCloseToDeadline>
+        <isNotAcceptedInTime>0</isNotAcceptedInTime>
+        <starred>0</starred>
+        <customData>
+            <customValue>
+                <field>
+                    <id>32</id>
+                    <name>Контактное лицо</name>
+                </field>
+                <value>0</value>
+                <text/>
+            </customValue>
+            <customValue>
+                <field>
+                    <id>34</id>
+                    <name>Дата и время следующего контакта</name>
+                </field>
+                <value/>
+                <text/>
+            </customValue>
+            <customValue>
+                <field>
+                    <id>46</id>
+                    <name>Проектная задача (учитывать сроки для листа "График")</name>
+                </field>
+                <value>0</value>
+                <text>Нет</text>
+            </customValue>
+            <customValue>
+                <field>
+                    <id>50</id>
+                    <name>Услуга</name>
+                </field>
+                <value>0</value>
+                <text/>
+            </customValue>
+            <customValue>
+                <field>
+                    <id>72</id>
+                    <name>Выработка, мин</name>
+                </field>
+                <value>548</value>
+                <text>548 мин</text>
+            </customValue>
+        </customData>
+        <workers>
+            <users>
+                <user>
+                    <id>9230</id>
+                    <name>Станислав Попов</name>
+                </user>
+            </users>
+        </workers>
+        <auditors/>
+        <members>
+            <groups>
+                <group>
+                    <id>4717</id>
+                    <name>Программисты</name>
+                </group>
+            </groups>
+        </members>
+    </task>
+</response>

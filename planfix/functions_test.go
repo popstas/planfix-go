@@ -1,12 +1,12 @@
 package planfix_test
 
 import (
-	"testing"
-	"net/http/httptest"
-	"io/ioutil"
-	"net/http"
 	"github.com/popstas/planfix-go/planfix"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 )
 
 type MockedServer struct {
@@ -30,7 +30,9 @@ func NewMockedServer(fileName string) *MockedServer {
 
 func (s *MockedServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	lastRequest, err := ioutil.ReadAll(req.Body)
+	body := string(lastRequest)
 	if err != nil {
+		log.Println(body)
 		panic(err)
 	}
 	s.Requests = append(s.Requests, lastRequest)
@@ -109,5 +111,51 @@ func TestApi_ActionGetList(t *testing.T) {
 	}
 	if actionList.Status != "ok" {
 		t.Error("Expected ok, got ", actionList.Status)
+	}
+}
+
+// analitic.getList
+func TestApi_AnaliticGetList(t *testing.T) {
+	api := newApi("../tests/fixtures/analitic.getList.xml")
+	var analiticList planfix.XmlResponseAnaliticGetList
+	analiticList, err := api.AnaliticGetList(0)
+	if err != nil {
+		t.Error(err)
+	}
+	if analiticList.Status != "ok" {
+		t.Error("Expected ok, got ", analiticList.Status)
+	}
+}
+
+// action.add
+func TestApi_ActionAdd(t *testing.T) {
+	api := newApi("../tests/fixtures/action.add.xml")
+	request := planfix.XmlRequestActionAdd{
+		TaskGeneral: 123,
+		Description: "asdf",
+	}
+	var actionAdded planfix.XmlResponseActionAdd
+	actionAdded, err := api.ActionAdd(request)
+	if err != nil {
+		t.Error(err)
+	}
+	if actionAdded.Status != "ok" {
+		t.Error("Expected ok, got ", actionAdded.Status)
+	}
+	if actionAdded.ActionId != 123 {
+		t.Error("Expected 123, got ", actionAdded.ActionId)
+	}
+}
+
+// action.get
+func TestApi_TaskGet(t *testing.T) {
+	api := newApi("../tests/fixtures/task.get.xml")
+	var task planfix.XmlResponseTaskGet
+	task, err := api.TaskGet(123, 0)
+	if err != nil {
+		t.Error(err)
+	}
+	if task.Status != "ok" {
+		t.Error("Expected ok, got ", task.Status)
 	}
 }

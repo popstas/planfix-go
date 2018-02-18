@@ -12,9 +12,17 @@
 
 Вызовы к API лежат в [planfix/functions.go](planfix/functions.go)
 
+Дополнительные функции на основе основных лежат в [planfix/functions_extra.go](planfix/functions_extra.go)
+
 ## Реализованные функции
 - auth.login
 - action.get
 - action.getList
+- action.add
+- analitic.getList
+- task.get
+
+## Дополнительные функции
+- GetAnaliticByName
 
 Пример использования в [main.go](main.go)

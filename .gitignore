@@ -1,2 +1,4 @@
 *.exe
 *.coverprofile
+test.go
+/fixtures/requests/

@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/popstas/planfix-go/planfix"
 	"fmt"
+	"github.com/popstas/planfix-go/planfix"
 	"os"
 )
 
-func main(){
+func main() {
 	planfixApi := planfix.New(
 		"https://api.planfix.ru/xml/",
 		os.Getenv("PLANFIX_API_KEY"),
