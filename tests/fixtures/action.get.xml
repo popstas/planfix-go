@@ -1,0 +1,57 @@
+<response status="ok">
+    <action>
+        <id>6379544</id>
+        <description>&lt;p&gt;Действие, изменяющее статус и много чего еще&lt;br/&gt;</description>
+        <type>ACTION</type>
+        <statusChange>
+            <oldStatus>2</oldStatus>
+            <newStatus>4</newStatus>
+        </statusChange>
+        <isNotRead>0</isNotRead>
+        <dateTime>18-02-2018 21:12</dateTime>
+        <fromEmail>0</fromEmail>
+        <task>
+            <id>1128468</id>
+            <title>Интеграция с toggl</title>
+        </task>
+        <project>
+            <id>9830</id>
+            <title>Стандартизация и технические решения</title>
+        </project>
+        <owner>
+            <id>9230</id>
+            <name>Станислав Попов</name>
+        </owner>
+        <taskExpectDateChanged>
+            <oldDate>16-02-2018 23:59</oldDate>
+            <newDate>05-03-2018 12:00</newDate>
+            <newDateIsSet>1</newDateIsSet>
+            <oldDateIsSet>1</oldDateIsSet>
+        </taskExpectDateChanged>
+        <taskStartTimeChanged>
+            <oldDate>03-02-2018 00:00</oldDate>
+            <newDate>03-02-2018 12:00</newDate>
+            <newDateIsSet>1</newDateIsSet>
+            <oldDateIsSet>1</oldDateIsSet>
+        </taskStartTimeChanged>
+        <files>
+            <file>
+                <id>161854</id>
+                <name>action.get.xml</name>
+            </file>
+        </files>
+        <analitics>
+            <analitic>
+                <id>263</id>
+                <key>612122</key>
+                <name>Выработка</name>
+            </analitic>
+        </analitics>
+        <notifiedList>
+            <user>
+                <id>9230</id>
+                <name>Станислав Попов</name>
+            </user>
+        </notifiedList>
+    </action>
+</response>
