@@ -20,7 +20,9 @@
 - action.getList
 - action.add
 - analitic.getList
+- analitic.getOptions
 - task.get
+- user.get
 
 ## Дополнительные функции
 - GetAnaliticByName

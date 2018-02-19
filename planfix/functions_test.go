@@ -160,7 +160,7 @@ func TestApi_ActionAdd(t *testing.T) {
 	}
 }
 
-// action.get
+// task.get
 func TestApi_TaskGet(t *testing.T) {
 	api := newApi("../tests/fixtures/task.get.xml")
 	var task planfix.XmlResponseTaskGet
@@ -170,5 +170,18 @@ func TestApi_TaskGet(t *testing.T) {
 	}
 	if task.Status != "ok" {
 		t.Error("Expected ok, got ", task.Status)
+	}
+}
+
+// user.get
+func TestApi_UserGet(t *testing.T) {
+	api := newApi("../tests/fixtures/user.get.xml")
+	var user planfix.XmlResponseUserGet
+	user, err := api.UserGet(0)
+	if err != nil {
+		t.Error(err)
+	}
+	if user.Status != "ok" {
+		t.Error("Expected ok, got ", user.Status)
 	}
 }

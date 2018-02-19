@@ -212,3 +212,29 @@ func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 
 	return *responseStruct, nil
 }
+
+// user.get
+func (a *Api) UserGet(userId int) (XmlResponseUserGet, error) {
+	a.ensureAuthenticated()
+	requestStruct := XmlRequestUserGet{
+		Method:  "user.get",
+		Account: a.Account,
+		Sid:     a.Sid,
+		UserId:  userId,
+	}
+	responseStruct := new(XmlResponseUserGet)
+
+	err := a.apiRequest(requestStruct, responseStruct)
+	if err != nil {
+		return XmlResponseUserGet{}, err
+	}
+
+	if responseStruct.Status == "error" {
+		return XmlResponseUserGet{}, errors.New(fmt.Sprintf(
+			"Planfix request to %s failed: %s",
+			requestStruct.Method,
+			a.getErrorByCode(responseStruct.Code)))
+	}
+
+	return *responseStruct, nil
+}

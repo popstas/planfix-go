@@ -24,7 +24,7 @@ type XmlResponseFile struct {
 	Name string `xml:"name"`
 }
 
-type XmlResponseUser struct {
+type XmlResponseActionUser struct {
 	Id   int    `xml:"id,omitempty"`
 	Name string `xml:"name,omitempty"`
 }
@@ -63,7 +63,7 @@ type XmlResponseAction struct {
 	TaskTitle                    string                      `xml:"task>title"`
 	ContactGeneral               int                         `xml:"contact>general"`
 	ContactName                  string                      `xml:"contact>name"`
-	Owner                        XmlResponseUser             `xml:"owner"`
+	Owner                        XmlResponseActionUser       `xml:"owner"`
 	ProjectId                    int                         `xml:"project>id"`
 	ProjectTitle                 string                      `xml:"project>title"`
 	TaskExpectDateChangedOldDate string                      `xml:"taskExpectDateChanged>oldDate"`
@@ -71,7 +71,7 @@ type XmlResponseAction struct {
 	TaskStartTimeChangedOldDate  string                      `xml:"taskStartTimeChanged>oldDate"`
 	TaskStartTimeChangedNewDate  string                      `xml:"taskStartTimeChanged>newDate"`
 	Files                        []XmlResponseFile           `xml:"files>file"`
-	NotifiedList                 []XmlResponseUser           `xml:"notifiedList>user"`
+	NotifiedList                 []XmlResponseActionUser     `xml:"notifiedList>user"`
 	Analitics                    []XmlResponseActionAnalitic `xml:"analitics>analitic"`
 }
 
@@ -100,6 +100,15 @@ type XmlRequestAnalitic struct {
 type XmlRequestAnaliticField struct {
 	FieldId int         `xml:"fieldId"`
 	Value   interface{} `xml:"value"`
+}
+
+// TODO: добавить все поля из https://planfix.ru/docs/ПланФикс_API_user.get
+type XmlResponseUser struct {
+	Id       int    `xml:"id"`
+	Name     string `xml:"name"`
+	LastName string `xml:"lastName"`
+	Login    string `xml:"login"`
+	Email    string `xml:"email"`
 }
 
 // auth.login
@@ -263,4 +272,24 @@ type XmlResponseTaskGet struct {
 	Message string   `xml:"message"`
 
 	Task XmlResponseTask `xml:"task"`
+}
+
+// user.get
+type XmlRequestUserGet struct {
+	XMLName xml.Name `xml:"request"`
+	Method  string   `xml:"method,attr"`
+	Account string   `xml:"account"`
+	Sid     string   `xml:"sid"`
+
+	UserId int `xml:"user>id,omitempty"`
+}
+
+// user.get response
+type XmlResponseUserGet struct {
+	XMLName xml.Name `xml:"response"`
+	Status  string   `xml:"status,attr"`
+	Code    string   `xml:"code"`
+	Message string   `xml:"message"`
+
+	User XmlResponseUser `xml:"user"`
 }

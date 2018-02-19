@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response status="ok">
+    <user>
+        <id>9230</id>
+        <name>Станислав</name>
+        <lastName>Попов</lastName>
+        <login>popstas</login>
+        <email>popstas@company.ru</email>
+        <jabber>popstas@jabber.ru</jabber>
+        <role>ADMIN</role>
+        <status>ACTIVE</status>
+        <isActivated>1</isActivated>
+        <notify>
+            <byEmail>1</byEmail>
+            <byJabber>0</byJabber>
+            <byPlanfix>1</byPlanfix>
+        </notify>
+        <birthdate>13-03-1987</birthdate>
+        <sex>MALE</sex>
+        <phone>8-922-222-22-22</phone>
+        <coeff>1</coeff>
+        <timezone>Asia/Yekaterinburg</timezone>
+        <useDst>1</useDst>
+        <isInvisibleOutOfGroup>0</isInvisibleOutOfGroup>
+        <isBlindOutOfGroup>0</isBlindOutOfGroup>
+        <post>
+            <id>1994</id>
+            <name>Программист</name>
+        </post>
+        <userPic>https://tagilcity.planfix.ru/?action=getuserpic&amp;id=9230&amp;h=cf6a1c72aeb86097e2411550870e94a0
+        </userPic>
+        <isOnline>0</isOnline>
+        <userGroups>
+            <userGroup>
+                <id>4708</id>
+                <name>Отдел разработки</name>
+            </userGroup>
+            <userGroup>
+                <id>4717</id>
+                <name>Программисты</name>
+            </userGroup>
+        </userGroups>
+    </user>
+</response>
