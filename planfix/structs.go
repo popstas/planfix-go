@@ -77,11 +77,13 @@ type XmlResponseAnalitic struct {
 }
 
 type XmlRequestAnalitic struct {
-	Id       int `xml:"id"`
-	ItemData struct {
-		FieldId int    `xml:"fieldId"`
-		Value   string `xml:"value"`
-	} `xml:"itemData"`
+	Id       int                       `xml:"id"`
+	ItemData []XmlRequestAnaliticField `xml:"analiticData>itemData"`
+}
+
+type XmlRequestAnaliticField struct {
+	FieldId int    `xml:"fieldId"`
+	Value   string `xml:"value"`
 }
 
 // auth.login
@@ -160,16 +162,16 @@ type XmlRequestActionAdd struct {
 	Account string   `xml:"account"`
 	Sid     string   `xml:"sid"`
 
-	Description    string               `xml:"description"`
-	TaskId         int                  `xml:"task>id,omitempty"`
-	TaskGeneral    int                  `xml:"task>general,omitempty"`
-	ContactGeneral int                  `xml:"contact>general,omitempty"`
-	TaskNewStatus  int                  `xml:"taskNewStatus,omitempty"`
-	NotifiedList   []XmlResponseUser    `xml:"notifiedList>user,omitempty"`
-	IsHidden       bool                 `xml:"isHidden"`
-	Owner          XmlResponseUser      `xml:"owner,omitempty"`
-	DateTime       string               `xml:"dateTime,omitempty"`
-	Analitics      []XmlRequestAnalitic `xml:"analitics>analitic,omitempty"`
+	Description    string               `xml:"action>description"`
+	TaskId         int                  `xml:"action>task>id,omitempty"`
+	TaskGeneral    int                  `xml:"action>task>general,omitempty"`
+	ContactGeneral int                  `xml:"action>contact>general,omitempty"`
+	TaskNewStatus  int                  `xml:"action>taskNewStatus,omitempty"`
+	NotifiedList   []XmlResponseUser    `xml:"action>notifiedList>user,omitempty"`
+	IsHidden       int                  `xml:"action>isHidden"`
+	Owner          XmlResponseUser      `xml:"action>owner,omitempty"`
+	DateTime       string               `xml:"action>dateTime,omitempty"`
+	Analitics      []XmlRequestAnalitic `xml:"action>analitics>analitic,omitempty"`
 }
 
 // action.add response

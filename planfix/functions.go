@@ -123,7 +123,6 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 }
 
 // action.add
-// TODO: не находит задачу, код 3001 - https://tagilcity.planfix.ru/task/530277
 func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd, error) {
 	a.ensureAuthenticated()
 
@@ -151,9 +150,10 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 
 	if responseStruct.Status == "error" {
 		return XmlResponseActionAdd{}, errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s",
+			"Planfix request to %s failed: %s, %s",
 			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code)))
+			a.getErrorByCode(responseStruct.Code),
+			responseStruct.Message))
 	}
 
 	return *responseStruct, nil
