@@ -1,0 +1,50 @@
+<response status="ok">
+    <analitic>
+        <id>263</id>
+        <name>Выработка</name>
+        <group>
+            <id>1</id>
+        </group>
+        <fields>
+            <field>
+                <id>741</id>
+                <num>0</num>
+                <name>Вид работы</name>
+                <type>HANDBOOK</type>
+                <hanbook>
+                    <id>131</id>
+                </hanbook>
+            </field>
+            <field>
+                <id>743</id>
+                <num>1</num>
+                <name>Дата</name>
+                <type>DATE</type>
+            </field>
+            <field>
+                <id>824</id>
+                <num>2</num>
+                <name>Период времени</name>
+                <type>TIMEPERIOD</type>
+            </field>
+            <field>
+                <id>747</id>
+                <num>3</num>
+                <name>Кол-во</name>
+                <type>NUMBER</type>
+            </field>
+            <field>
+                <id>749</id>
+                <num>4</num>
+                <name>Комментарий / ссылка</name>
+                <type>TEXT</type>
+            </field>
+            <field>
+                <id>846</id>
+                <num>5</num>
+                <name>Сотрудник</name>
+                <type>LOGINLIST</type>
+            </field>
+        </fields>
+    </analitic>
+</response>

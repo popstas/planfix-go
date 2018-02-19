@@ -127,6 +127,19 @@ func TestApi_AnaliticGetList(t *testing.T) {
 	}
 }
 
+// analitic.getOptiions
+func TestApi_AnaliticGetOptions(t *testing.T) {
+	api := newApi("../tests/fixtures/analitic.getOptions.xml")
+	var task planfix.XmlResponseAnaliticGetOptions
+	task, err := api.AnaliticGetOptions(123)
+	if err != nil {
+		t.Error(err)
+	}
+	if task.Status != "ok" {
+		t.Error("Expected ok, got ", task.Status)
+	}
+}
+
 // action.add
 func TestApi_ActionAdd(t *testing.T) {
 	api := newApi("../tests/fixtures/action.add.xml")

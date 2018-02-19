@@ -122,6 +122,33 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 	return *responseStruct, nil
 }
 
+// analitic.get
+func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions, error) {
+	a.ensureAuthenticated()
+	requestStruct := XmlRequestAnaliticGetOptions{
+		Method:     "analitic.getOptions",
+		Account:    a.Account,
+		Sid:        a.Sid,
+		AnaliticId: analiticId,
+	}
+	responseStruct := new(XmlResponseAnaliticGetOptions)
+
+	err := a.apiRequest(requestStruct, responseStruct)
+	if err != nil {
+		return XmlResponseAnaliticGetOptions{}, err
+	}
+
+	if responseStruct.Status == "error" {
+		return XmlResponseAnaliticGetOptions{}, errors.New(fmt.Sprintf(
+			"Planfix request to %s failed: %s, %s",
+			requestStruct.Method,
+			a.getErrorByCode(responseStruct.Code),
+			responseStruct.Message))
+	}
+
+	return *responseStruct, nil
+}
+
 // action.add
 func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd, error) {
 	a.ensureAuthenticated()

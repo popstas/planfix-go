@@ -35,6 +35,22 @@ type XmlResponseActionAnalitic struct {
 	Name string `xml:"name"`
 }
 
+type XmlResponseAnaliticOptions struct {
+	Id      int                               `xml:"id"`
+	Name    string                            `xml:"name"`
+	GroupId int                               `xml:"group>id"`
+	Fields  []XmlResponseAnaliticOptionsField `xml:"fields>field"`
+}
+
+type XmlResponseAnaliticOptionsField struct {
+	Id         int      `xml:"id"`
+	Num        int      `xml:"num"`
+	Name       string   `xml:"name"`
+	Type       string   `xml:"type"`
+	ListValues []string `xml:"list>value"`
+	HandbookId int      `xml:"handbook>id"`
+}
+
 type XmlResponseAction struct {
 	Id                           int                         `xml:"id"`
 	Description                  string                      `xml:"description"`
@@ -82,8 +98,8 @@ type XmlRequestAnalitic struct {
 }
 
 type XmlRequestAnaliticField struct {
-	FieldId int    `xml:"fieldId"`
-	Value   string `xml:"value"`
+	FieldId int         `xml:"fieldId"`
+	Value   interface{} `xml:"value"`
 }
 
 // auth.login
@@ -206,6 +222,26 @@ type XmlResponseAnaliticGetList struct {
 		AnaliticsTotalCount int                   `xml:"totalCount,attr"`
 		Analitics           []XmlResponseAnalitic `xml:"analitic"`
 	} `xml:"analitics"`
+}
+
+// analitic.getOptions
+type XmlRequestAnaliticGetOptions struct {
+	XMLName xml.Name `xml:"request"`
+	Method  string   `xml:"method,attr"`
+	Account string   `xml:"account"`
+	Sid     string   `xml:"sid"`
+
+	AnaliticId int `xml:"analitic>id"`
+}
+
+// analitic.getOptions response
+type XmlResponseAnaliticGetOptions struct {
+	XMLName xml.Name `xml:"response"`
+	Status  string   `xml:"status,attr"`
+	Code    string   `xml:"code"`
+	Message string   `xml:"message"`
+
+	Analitic XmlResponseAnaliticOptions `xml:"analitic"`
 }
 
 // task.get
