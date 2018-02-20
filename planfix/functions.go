@@ -2,7 +2,6 @@ package planfix
 
 import (
 	"errors"
-	"fmt"
 	"log"
 )
 
@@ -22,13 +21,6 @@ func (a Api) AuthLogin(user, password string) (string, error) {
 		return "", err
 	}
 
-	if responseStruct.Status == "error" {
-		return "", errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s",
-			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code)))
-	}
-
 	return responseStruct.Sid, nil
 }
 
@@ -46,13 +38,6 @@ func (a *Api) ActionGet(actionId int) (XmlResponseActionGet, error) {
 	err := a.apiRequest(requestStruct, responseStruct)
 	if err != nil {
 		return XmlResponseActionGet{}, err
-	}
-
-	if responseStruct.Status == "error" {
-		return XmlResponseActionGet{}, errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s",
-			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code)))
 	}
 
 	return *responseStruct, nil
@@ -85,13 +70,6 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 		return XmlResponseActionGetList{}, err
 	}
 
-	if responseStruct.Status == "error" {
-		return XmlResponseActionGetList{}, errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s",
-			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code)))
-	}
-
 	return *responseStruct, nil
 }
 
@@ -112,13 +90,6 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 		return XmlResponseAnaliticGetList{}, err
 	}
 
-	if responseStruct.Status == "error" {
-		return XmlResponseAnaliticGetList{}, errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s",
-			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code)))
-	}
-
 	return *responseStruct, nil
 }
 
@@ -136,14 +107,6 @@ func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions,
 	err := a.apiRequest(requestStruct, responseStruct)
 	if err != nil {
 		return XmlResponseAnaliticGetOptions{}, err
-	}
-
-	if responseStruct.Status == "error" {
-		return XmlResponseAnaliticGetOptions{}, errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s, %s",
-			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code),
-			responseStruct.Message))
 	}
 
 	return *responseStruct, nil
@@ -175,14 +138,6 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 		return XmlResponseActionAdd{}, err
 	}
 
-	if responseStruct.Status == "error" {
-		return XmlResponseActionAdd{}, errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s, %s",
-			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code),
-			responseStruct.Message))
-	}
-
 	return *responseStruct, nil
 }
 
@@ -203,13 +158,6 @@ func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 		return XmlResponseTaskGet{}, err
 	}
 
-	if responseStruct.Status == "error" {
-		return XmlResponseTaskGet{}, errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s",
-			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code)))
-	}
-
 	return *responseStruct, nil
 }
 
@@ -227,13 +175,6 @@ func (a *Api) UserGet(userId int) (XmlResponseUserGet, error) {
 	err := a.apiRequest(requestStruct, responseStruct)
 	if err != nil {
 		return XmlResponseUserGet{}, err
-	}
-
-	if responseStruct.Status == "error" {
-		return XmlResponseUserGet{}, errors.New(fmt.Sprintf(
-			"Planfix request to %s failed: %s",
-			requestStruct.Method,
-			a.getErrorByCode(responseStruct.Code)))
 	}
 
 	return *responseStruct, nil

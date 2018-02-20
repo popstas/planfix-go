@@ -15,6 +15,22 @@ type MockedServer struct {
 	Response string
 }
 
+func assert(t *testing.T, data interface{}, expected interface{}) {
+	if data != expected {
+		t.Errorf("Expected %v, got, %v", expected, data)
+	}
+}
+func expectError(t *testing.T, err error, msg string) {
+	if err == nil {
+		t.Errorf("Expected error, got success %v", msg)
+	}
+}
+func expectSuccess(t *testing.T, err error, msg string) {
+	if err != nil {
+		t.Errorf("Expected success, got %v %v", err, msg)
+	}
+}
+
 func NewMockedServer(fileName string) *MockedServer {
 	buf, _ := ioutil.ReadFile(fileName)
 
@@ -49,11 +65,7 @@ func newApi(fixtureFileName string) planfix.Api {
 func TestApi_ErrorCode(t *testing.T) {
 	api := newApi("../tests/fixtures/error.xml")
 	_, err := api.AuthLogin(api.User, api.Password)
-	if err != nil {
-		log.Println(err)
-	} else {
-		t.Error("Expected error, got success")
-	}
+	expectError(t, err, "TestApi_ErrorCode")
 }
 
 // auth.login
@@ -61,12 +73,9 @@ func TestApi_AuthLogin(t *testing.T) {
 	api := newApi("../tests/fixtures/auth.login.xml")
 	api.Sid = ""
 	answer, err := api.AuthLogin(api.User, api.Password)
-	if err != nil {
-		t.Error(err)
-	}
-	if answer != "123" {
-		t.Error("Expected 123, got ", answer)
-	}
+
+	expectSuccess(t, err, "TestApi_AuthLogin")
+	assert(t, answer, "123")
 }
 
 // authenticate before api request if not authenticated
@@ -74,15 +83,11 @@ func TestApi_EnsureAuthenticated(t *testing.T) {
 	api := newApi("../tests/fixtures/auth.login.xml")
 	api.Sid = ""
 	_, _ = api.ActionGet(456)
-	if api.Sid != "123" {
-		t.Error("Expected api.Sid is 123, got ", api.Sid)
-	}
+	assert(t, api.Sid, "123")
 
 	api.Sid = "789"
 	_, _ = api.ActionGet(456)
-	if api.Sid != "789" {
-		t.Error("Expected api.Sid is 789, got ", api.Sid)
-	}
+	assert(t, api.Sid, "789")
 }
 
 // action.get
@@ -90,12 +95,9 @@ func TestApi_ActionGet(t *testing.T) {
 	api := newApi("../tests/fixtures/action.get.xml")
 	var action planfix.XmlResponseActionGet
 	action, err := api.ActionGet(123)
-	if err != nil {
-		t.Error(err)
-	}
-	if action.Status != "ok" {
-		t.Error("Expected ok, got ", action.Status)
-	}
+
+	expectSuccess(t, err, "TestApi_ActionGet")
+	assert(t, action.Action.TaskId, 1128468)
 }
 
 // action.getList
@@ -106,12 +108,9 @@ func TestApi_ActionGetList(t *testing.T) {
 	}
 	var actionList planfix.XmlResponseActionGetList
 	actionList, err := api.ActionGetList(request)
-	if err != nil {
-		t.Error(err)
-	}
-	if actionList.Status != "ok" {
-		t.Error("Expected ok, got ", actionList.Status)
-	}
+
+	expectSuccess(t, err, "TestApi_ActionGetList")
+	assert(t, actionList.Actions.ActionsTotalCount, 31)
 }
 
 // analitic.getList
@@ -119,25 +118,19 @@ func TestApi_AnaliticGetList(t *testing.T) {
 	api := newApi("../tests/fixtures/analitic.getList.xml")
 	var analiticList planfix.XmlResponseAnaliticGetList
 	analiticList, err := api.AnaliticGetList(0)
-	if err != nil {
-		t.Error(err)
-	}
-	if analiticList.Status != "ok" {
-		t.Error("Expected ok, got ", analiticList.Status)
-	}
+
+	expectSuccess(t, err, "TestApi_AnaliticGetList")
+	assert(t, analiticList.Analitics.AnaliticsTotalCount, 2)
 }
 
 // analitic.getOptiions
 func TestApi_AnaliticGetOptions(t *testing.T) {
 	api := newApi("../tests/fixtures/analitic.getOptions.xml")
-	var task planfix.XmlResponseAnaliticGetOptions
-	task, err := api.AnaliticGetOptions(123)
-	if err != nil {
-		t.Error(err)
-	}
-	if task.Status != "ok" {
-		t.Error("Expected ok, got ", task.Status)
-	}
+	var analitic planfix.XmlResponseAnaliticGetOptions
+	analitic, err := api.AnaliticGetOptions(123)
+
+	expectSuccess(t, err, "TestApi_AnaliticGetOptions")
+	assert(t, analitic.Analitic.GroupId, 1)
 }
 
 // action.add
@@ -149,15 +142,9 @@ func TestApi_ActionAdd(t *testing.T) {
 	}
 	var actionAdded planfix.XmlResponseActionAdd
 	actionAdded, err := api.ActionAdd(request)
-	if err != nil {
-		t.Error(err)
-	}
-	if actionAdded.Status != "ok" {
-		t.Error("Expected ok, got ", actionAdded.Status)
-	}
-	if actionAdded.ActionId != 123 {
-		t.Error("Expected 123, got ", actionAdded.ActionId)
-	}
+
+	expectSuccess(t, err, "TestApi_ActionAdd")
+	assert(t, actionAdded.ActionId, 123)
 }
 
 // task.get
@@ -165,12 +152,9 @@ func TestApi_TaskGet(t *testing.T) {
 	api := newApi("../tests/fixtures/task.get.xml")
 	var task planfix.XmlResponseTaskGet
 	task, err := api.TaskGet(123, 0)
-	if err != nil {
-		t.Error(err)
-	}
-	if task.Status != "ok" {
-		t.Error("Expected ok, got ", task.Status)
-	}
+
+	expectSuccess(t, err, "TestApi_TaskGet")
+	assert(t, task.Task.ProjectId, 9830)
 }
 
 // user.get
@@ -178,10 +162,7 @@ func TestApi_UserGet(t *testing.T) {
 	api := newApi("../tests/fixtures/user.get.xml")
 	var user planfix.XmlResponseUserGet
 	user, err := api.UserGet(0)
-	if err != nil {
-		t.Error(err)
-	}
-	if user.Status != "ok" {
-		t.Error("Expected ok, got ", user.Status)
-	}
+
+	expectSuccess(t, err, "TestApi_UserGet")
+	assert(t, user.User.Login, "popstas")
 }

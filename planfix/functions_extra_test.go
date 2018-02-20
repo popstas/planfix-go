@@ -11,23 +11,15 @@ func TestApi_GetAnaliticByName(t *testing.T) {
 
 	// existent
 	analitic, err := api.GetAnaliticByName("Выработка")
-	if err != nil {
-		t.Error(err)
-	}
-	if analitic.Name != "Выработка" {
-		t.Error("Expected Выработка, got ", analitic.Name)
-	}
+	expectSuccess(t, err, "TestApi_GetAnaliticByName Выработка")
+	assert(t, analitic.Name, "Выработка")
 
 	// non existent
 	analitic, err = api.GetAnaliticByName("ldkfgjld")
-	if err == nil {
-		t.Error("Expected error, got ", analitic)
-	}
+	expectError(t, err, "TestApi_GetAnaliticByName non existent")
 
 	// error
 	api = newApi("../tests/fixtures/error.xml")
 	analitic, err = api.GetAnaliticByName("ldkfgjld")
-	if err == nil {
-		t.Error("Expected error, got ", analitic)
-	}
+	expectError(t, err, "TestApi_GetAnaliticByName error")
 }

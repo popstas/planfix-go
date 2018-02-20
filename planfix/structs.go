@@ -19,6 +19,13 @@ type xmlResponse struct {
 	Status  string   `xml:"status,attr"`
 }*/
 
+type XmlResponseStatus struct {
+	XMLName xml.Name `xml:"response"`
+	Status  string   `xml:"status,attr"`
+	Code    string   `xml:"code"`
+	Message string   `xml:"message"`
+}
+
 type XmlResponseFile struct {
 	Id   int    `xml:"id"`
 	Name string `xml:"name"`
@@ -124,11 +131,7 @@ type XmlRequestAuth struct {
 // auth.login response
 type XmlResponseAuth struct {
 	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
-
-	Sid string `xml:"sid"`
+	Sid     string   `xml:"sid"`
 }
 
 // action.get
@@ -143,12 +146,8 @@ type XmlRequestActionGet struct {
 
 // action.get response
 type XmlResponseActionGet struct {
-	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
-
-	Action XmlResponseAction `xml:"action"`
+	XMLName xml.Name          `xml:"response"`
+	Action  XmlResponseAction `xml:"action"`
 }
 
 // action.getList
@@ -169,10 +168,6 @@ type XmlRequestActionGetList struct {
 // action.getList response
 type XmlResponseActionGetList struct {
 	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
-
 	Actions struct {
 		ActionsCount      int                 `xml:"count,attr"`
 		ActionsTotalCount int                 `xml:"totalCount,attr"`
@@ -201,12 +196,8 @@ type XmlRequestActionAdd struct {
 
 // action.add response
 type XmlResponseActionAdd struct {
-	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
-
-	ActionId int `xml:"action>id"`
+	XMLName  xml.Name `xml:"response"`
+	ActionId int      `xml:"action>id"`
 }
 
 // analitic.getList
@@ -221,11 +212,7 @@ type XmlRequestAnaliticGetList struct {
 
 // analitic.getList response
 type XmlResponseAnaliticGetList struct {
-	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
-
+	XMLName   xml.Name `xml:"response"`
 	Analitics struct {
 		AnaliticsCount      int                   `xml:"count,attr"`
 		AnaliticsTotalCount int                   `xml:"totalCount,attr"`
@@ -245,11 +232,7 @@ type XmlRequestAnaliticGetOptions struct {
 
 // analitic.getOptions response
 type XmlResponseAnaliticGetOptions struct {
-	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
-
+	XMLName  xml.Name                   `xml:"response"`
 	Analitic XmlResponseAnaliticOptions `xml:"analitic"`
 }
 
@@ -266,12 +249,8 @@ type XmlRequestTaskGet struct {
 
 // task.get response
 type XmlResponseTaskGet struct {
-	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
-
-	Task XmlResponseTask `xml:"task"`
+	XMLName xml.Name        `xml:"response"`
+	Task    XmlResponseTask `xml:"task"`
 }
 
 // user.get
@@ -286,10 +265,6 @@ type XmlRequestUserGet struct {
 
 // user.get response
 type XmlResponseUserGet struct {
-	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-	Code    string   `xml:"code"`
-	Message string   `xml:"message"`
-
-	User XmlResponseUser `xml:"user"`
+	XMLName xml.Name        `xml:"response"`
+	User    XmlResponseUser `xml:"user"`
 }

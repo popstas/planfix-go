@@ -1,13 +1,14 @@
 package planfix
 
 import (
-	"fmt"
 	"encoding/xml"
-	"net/http"
-	"log"
-	"strings"
+	"errors"
+	"fmt"
 	"io/ioutil"
+	"log"
+	"net/http"
 	"regexp"
+	"strings"
 )
 
 type Api struct {
@@ -42,11 +43,11 @@ func (a *Api) ensureAuthenticated() error {
 	return nil
 }
 
-func (a Api) apiRequest(requestStruct interface{}, responseStruct interface{}) (error) {
+func (a Api) apiRequest(requestStruct interface{}, responseStruct interface{}) error {
 	//xmlBytes, err := xml.MarshalIndent(requestStruct, "  ", "    ")
 	xmlBytes, err := xml.Marshal(requestStruct)
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
 	xmlString := xml.Header + string(xmlBytes)
 
@@ -62,13 +63,13 @@ func (a Api) apiRequest(requestStruct interface{}, responseStruct interface{}) (
 	req.Header.Add("Content-Type", "application/xml; charset=utf-8")
 	req.Header.Set("User-Agent", a.UserAgent)
 	req.SetBasicAuth(a.ApiKey, "")
+
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("[ERROR] Network error while request to planfix: %s", err)
 		return err
 	}
 	defer resp.Body.Close()
-
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("status error: %v", resp.StatusCode)
 	}
@@ -78,6 +79,20 @@ func (a Api) apiRequest(requestStruct interface{}, responseStruct interface{}) (
 		"[DEBUG] response from planfix: %s",
 		strings.Replace(string(data), "\n", "", -1),
 	)
+
+	status := XmlResponseStatus{}
+	err = xml.Unmarshal(data, &status)
+	if err != nil {
+		return err
+	}
+	if status.Status != "ok" {
+		return errors.New(fmt.Sprintf(
+			"response status: %s, %s, %s",
+			status.Status,
+			a.getErrorByCode(status.Code),
+			status.Message,
+		))
+	}
 
 	err = xml.Unmarshal(data, &responseStruct)
 	return err
