@@ -86,6 +86,9 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 }
 
 func (a Api) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
+	requestStruct.SetAccount(a.Account)
+	requestStruct.SetSid(a.Sid)
+
 	// first request
 	status, data, err := a.tryRequest(requestStruct)
 	if err != nil {

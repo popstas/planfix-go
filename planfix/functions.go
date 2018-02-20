@@ -31,8 +31,6 @@ func (a *Api) ActionGet(actionId int) (XmlResponseActionGet, error) {
 		ActionId: actionId,
 	}
 	requestStruct.Method = "action.get"
-	requestStruct.SetAccount(a.Account)
-	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseActionGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
@@ -49,12 +47,6 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 
 	// defaults
 	requestStruct.Method = "action.getList"
-	if requestStruct.Account == "" {
-		requestStruct.Account = a.Account
-	}
-	if requestStruct.Sid == "" {
-		requestStruct.Sid = a.Sid
-	}
 	if requestStruct.PageCurrent == 0 {
 		requestStruct.PageCurrent = 1
 	}
@@ -80,8 +72,6 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 		AnaliticGroupId: groupId,
 	}
 	requestStruct.Method = "analitic.getList"
-	requestStruct.SetAccount(a.Account)
-	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseAnaliticGetList)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
@@ -100,8 +90,6 @@ func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions,
 		AnaliticId: analiticId,
 	}
 	requestStruct.Method = "analitic.getOptions"
-	requestStruct.SetAccount(a.Account)
-	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseAnaliticGetOptions)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
@@ -123,12 +111,6 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 
 	// defaults
 	requestStruct.Method = "action.add"
-	if requestStruct.Account == "" {
-		requestStruct.Account = a.Account
-	}
-	if requestStruct.Sid == "" {
-		requestStruct.Sid = a.Sid
-	}
 
 	responseStruct := new(XmlResponseActionAdd)
 
@@ -149,8 +131,6 @@ func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 		TaskGeneral: taskGeneral,
 	}
 	requestStruct.Method = "task.get"
-	requestStruct.SetAccount(a.Account)
-	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseTaskGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
@@ -168,8 +148,6 @@ func (a *Api) UserGet(userId int) (XmlResponseUserGet, error) {
 		UserId: userId,
 	}
 	requestStruct.Method = "user.get"
-	requestStruct.SetAccount(a.Account)
-	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseUserGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
