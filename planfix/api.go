@@ -85,10 +85,12 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 	return status, data, err
 }
 
-func (a Api) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
+func (a *Api) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
 	requestStruct.SetAccount(a.Account)
-	a.ensureAuthenticated()
-	requestStruct.SetSid(a.Sid)
+	if requestStruct.GetMethod() != "auth.login" {
+		a.ensureAuthenticated()
+		requestStruct.SetSid(a.Sid)
+	}
 
 	// first request
 	status, data, err := a.tryRequest(requestStruct)

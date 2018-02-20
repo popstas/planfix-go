@@ -6,6 +6,7 @@ import "encoding/xml"
 type XmlRequester interface {
 	SetSid(sid string)
 	SetAccount(account string)
+	GetMethod() string
 }
 type XmlRequestAuth struct {
 	XMLName xml.Name `xml:"request"`
@@ -19,6 +20,9 @@ func (a *XmlRequestAuth) SetSid(sid string) {
 }
 func (a *XmlRequestAuth) SetAccount(account string) {
 	a.Account = account
+}
+func (a *XmlRequestAuth) GetMethod() string {
+	return a.Method
 }
 
 // in all responses
@@ -134,6 +138,9 @@ type XmlRequestAuthLogin struct {
 func (a *XmlRequestAuthLogin) SetSid(sid string) {}
 func (a *XmlRequestAuthLogin) SetAccount(account string) {
 	a.Account = account
+}
+func (a *XmlRequestAuthLogin) GetMethod() string {
+	return a.Method
 }
 
 // auth.login response
