@@ -113,6 +113,6 @@ func (a Api) getErrorByCode(code string) string {
 	if msg, ok := errorCodes[code]; ok {
 		return msg
 	} else {
-		return code
+		return "Неизвестная ошибка"
 	}
 }

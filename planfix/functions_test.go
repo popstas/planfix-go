@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -86,6 +87,15 @@ func TestApi_ErrorCode(t *testing.T) {
 	api := newApi([]string{fixtureFromFile("error.xml")})
 	_, err := api.AuthLogin(api.User, api.Password)
 	expectError(t, err, "TestApi_ErrorCode")
+}
+
+func TestApi_ErrorCodeUnknown(t *testing.T) {
+	api := newApi([]string{fixtureFromFile("error.unknown.xml")})
+	_, err := api.AuthLogin(api.User, api.Password)
+	if !strings.Contains(string(err.Error()), "Неизвестная ошибка") {
+		t.Error("Failed to output unknown error")
+	}
+	expectError(t, err, "TestApi_ErrorCodeUnknown")
 }
 
 // auth.login
