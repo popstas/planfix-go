@@ -1,6 +1,7 @@
 package planfix_test
 
 import (
+	"encoding/xml"
 	"github.com/popstas/planfix-go/planfix"
 	"io/ioutil"
 	"log"
@@ -8,12 +9,6 @@ import (
 	"net/http/httptest"
 	"testing"
 )
-
-type MockedServer struct {
-	*httptest.Server
-	Requests [][]byte
-	Response string
-}
 
 func assert(t *testing.T, data interface{}, expected interface{}) {
 	if data != expected {
@@ -31,46 +26,71 @@ func expectSuccess(t *testing.T, err error, msg string) {
 	}
 }
 
-func NewMockedServer(fileName string) *MockedServer {
-	buf, _ := ioutil.ReadFile(fileName)
+type requestStruct struct {
+	XMLName xml.Name `xml:"request"`
+	Method  string   `xml:"method,attr"`
+	Account string   `xml:"account"`
+	Sid     string   `xml:"sid"`
+}
 
+func fixtureFromFile(fixtureName string) string {
+	buf, _ := ioutil.ReadFile("../tests/fixtures/" + fixtureName)
+	return string(buf)
+}
+
+type MockedServer struct {
+	*httptest.Server
+	Requests  [][]byte
+	Responses []string // fifo queue of answers
+}
+
+func NewMockedServer(responses []string) *MockedServer {
 	s := &MockedServer{
-		Requests: [][]byte{},
-		Response: string(buf),
+		Requests:  [][]byte{},
+		Responses: responses,
 	}
 
 	s.Server = httptest.NewServer(s)
-
 	return s
 }
 
 func (s *MockedServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	lastRequest, err := ioutil.ReadAll(req.Body)
 	body := string(lastRequest)
+
+	rs := requestStruct{}
+	err = xml.Unmarshal(lastRequest, &rs)
+	if err != nil {
+		log.Println(body)
+		panic(err)
+	}
+
 	if err != nil {
 		log.Println(body)
 		panic(err)
 	}
 	s.Requests = append(s.Requests, lastRequest)
-	resp.Write([]byte(s.Response))
+	answer := s.Responses[0]
+	s.Responses = s.Responses[1:]
+	resp.Write([]byte(answer))
 }
 
-func newApi(fixtureFileName string) planfix.Api {
-	ms := NewMockedServer(fixtureFileName)
+func newApi(responses []string) planfix.Api {
+	ms := NewMockedServer(responses)
 	api := planfix.New(ms.URL, "apiKey", "account", "user", "password")
 	api.Sid = "123"
 	return api
 }
 
 func TestApi_ErrorCode(t *testing.T) {
-	api := newApi("../tests/fixtures/error.xml")
+	api := newApi([]string{fixtureFromFile("error.xml")})
 	_, err := api.AuthLogin(api.User, api.Password)
 	expectError(t, err, "TestApi_ErrorCode")
 }
 
 // auth.login
 func TestApi_AuthLogin(t *testing.T) {
-	api := newApi("../tests/fixtures/auth.login.xml")
+	api := newApi([]string{fixtureFromFile("auth.login.xml")})
 	api.Sid = ""
 	answer, err := api.AuthLogin(api.User, api.Password)
 
@@ -80,7 +100,11 @@ func TestApi_AuthLogin(t *testing.T) {
 
 // authenticate before api request if not authenticated
 func TestApi_EnsureAuthenticated(t *testing.T) {
-	api := newApi("../tests/fixtures/auth.login.xml")
+	api := newApi([]string{
+		fixtureFromFile("auth.login.xml"),
+		fixtureFromFile("action.get.xml"),
+		fixtureFromFile("action.get.xml"),
+	})
 	api.Sid = ""
 	_, _ = api.ActionGet(456)
 	assert(t, api.Sid, "123")
@@ -92,7 +116,7 @@ func TestApi_EnsureAuthenticated(t *testing.T) {
 
 // action.get
 func TestApi_ActionGet(t *testing.T) {
-	api := newApi("../tests/fixtures/action.get.xml")
+	api := newApi([]string{fixtureFromFile("action.get.xml")})
 	var action planfix.XmlResponseActionGet
 	action, err := api.ActionGet(123)
 
@@ -102,7 +126,7 @@ func TestApi_ActionGet(t *testing.T) {
 
 // action.getList
 func TestApi_ActionGetList(t *testing.T) {
-	api := newApi("../tests/fixtures/action.getList.xml")
+	api := newApi([]string{fixtureFromFile("action.getList.xml")})
 	request := planfix.XmlRequestActionGetList{
 		TaskGeneral: 525330,
 	}
@@ -115,7 +139,7 @@ func TestApi_ActionGetList(t *testing.T) {
 
 // analitic.getList
 func TestApi_AnaliticGetList(t *testing.T) {
-	api := newApi("../tests/fixtures/analitic.getList.xml")
+	api := newApi([]string{fixtureFromFile("analitic.getList.xml")})
 	var analiticList planfix.XmlResponseAnaliticGetList
 	analiticList, err := api.AnaliticGetList(0)
 
@@ -125,7 +149,7 @@ func TestApi_AnaliticGetList(t *testing.T) {
 
 // analitic.getOptiions
 func TestApi_AnaliticGetOptions(t *testing.T) {
-	api := newApi("../tests/fixtures/analitic.getOptions.xml")
+	api := newApi([]string{fixtureFromFile("analitic.getOptions.xml")})
 	var analitic planfix.XmlResponseAnaliticGetOptions
 	analitic, err := api.AnaliticGetOptions(123)
 
@@ -135,7 +159,7 @@ func TestApi_AnaliticGetOptions(t *testing.T) {
 
 // action.add
 func TestApi_ActionAdd(t *testing.T) {
-	api := newApi("../tests/fixtures/action.add.xml")
+	api := newApi([]string{fixtureFromFile("action.add.xml")})
 	request := planfix.XmlRequestActionAdd{
 		TaskGeneral: 123,
 		Description: "asdf",
@@ -149,7 +173,7 @@ func TestApi_ActionAdd(t *testing.T) {
 
 // task.get
 func TestApi_TaskGet(t *testing.T) {
-	api := newApi("../tests/fixtures/task.get.xml")
+	api := newApi([]string{fixtureFromFile("task.get.xml")})
 	var task planfix.XmlResponseTaskGet
 	task, err := api.TaskGet(123, 0)
 
@@ -159,7 +183,7 @@ func TestApi_TaskGet(t *testing.T) {
 
 // user.get
 func TestApi_UserGet(t *testing.T) {
-	api := newApi("../tests/fixtures/user.get.xml")
+	api := newApi([]string{fixtureFromFile("user.get.xml")})
 	var user planfix.XmlResponseUserGet
 	user, err := api.UserGet(0)
 
