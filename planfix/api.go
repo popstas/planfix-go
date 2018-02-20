@@ -37,17 +37,18 @@ func (a *Api) ensureAuthenticated() error {
 		sid, err := a.AuthLogin(a.User, a.Password)
 		if err != nil {
 			log.Fatalf("Failed to authenticate to planfix.ru, %v", err)
+			return err
 		}
 		a.Sid = sid
 	}
 	return nil
 }
 
-func (a Api) apiRequest(requestStruct interface{}, responseStruct interface{}) error {
+func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, data []byte, err error) {
 	//xmlBytes, err := xml.MarshalIndent(requestStruct, "  ", "    ")
 	xmlBytes, err := xml.Marshal(requestStruct)
 	if err != nil {
-		return err
+		return status, data, err
 	}
 	xmlString := xml.Header + string(xmlBytes)
 
@@ -67,31 +68,56 @@ func (a Api) apiRequest(requestStruct interface{}, responseStruct interface{}) e
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Printf("[ERROR] Network error while request to planfix: %s", err)
-		return err
+		return status, data, err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("status error: %v", resp.StatusCode)
+		return status, data, fmt.Errorf("status error: %v", resp.StatusCode)
 	}
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err = ioutil.ReadAll(resp.Body)
 	log.Printf(
 		"[DEBUG] response from planfix: %s",
 		strings.Replace(string(data), "\n", "", -1),
 	)
 
-	status := XmlResponseStatus{}
 	err = xml.Unmarshal(data, &status)
+	return status, data, err
+}
+
+func (a Api) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
+	// first request
+	status, data, err := a.tryRequest(requestStruct)
 	if err != nil {
 		return err
 	}
 	if status.Status != "ok" {
-		return errors.New(fmt.Sprintf(
-			"response status: %s, %s, %s",
-			status.Status,
-			a.getErrorByCode(status.Code),
-			status.Message,
-		))
+		if status.Code == "0005" { // session expired
+			log.Println("[INFO] session expired, relogin")
+			a.Sid = ""
+			a.ensureAuthenticated()
+			requestStruct.SetSid(a.Sid)
+
+			// second request
+			status, data, err = a.tryRequest(requestStruct)
+			if status.Status != "ok" {
+				return errors.New(fmt.Sprintf(
+					"response status: %s, %s, %s",
+					status.Status,
+					a.getErrorByCode(status.Code),
+					status.Message,
+				))
+			}
+			err = xml.Unmarshal(data, &responseStruct)
+			return err
+		} else {
+			return errors.New(fmt.Sprintf(
+				"response status: %s, %s, %s",
+				status.Status,
+				a.getErrorByCode(status.Code),
+				status.Message,
+			))
+		}
 	}
 
 	err = xml.Unmarshal(data, &responseStruct)

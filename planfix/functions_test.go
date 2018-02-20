@@ -114,6 +114,19 @@ func TestApi_EnsureAuthenticated(t *testing.T) {
 	assert(t, api.Sid, "789")
 }
 
+// reauthenticate if session expired
+func TestApi_AuthenticatedExpire(t *testing.T) {
+	api := newApi([]string{
+		fixtureFromFile("error.sessionExpired.xml"),
+		fixtureFromFile("auth.login.xml"),
+		fixtureFromFile("action.get.xml"),
+	})
+	action, err := api.ActionGet(456)
+
+	expectSuccess(t, err, "TestApi_AuthenticatedExpire")
+	assert(t, action.Action.TaskId, 1128468)
+}
+
 // action.get
 func TestApi_ActionGet(t *testing.T) {
 	api := newApi([]string{fixtureFromFile("action.get.xml")})

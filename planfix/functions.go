@@ -15,7 +15,7 @@ func (a Api) AuthLogin(user, password string) (string, error) {
 	}
 	responseStruct := new(XmlResponseAuth)
 
-	err := a.apiRequest(requestStruct, responseStruct)
+	err := a.apiRequest(&requestStruct, responseStruct)
 	if err != nil {
 		log.Printf("[ERROR] %v", err)
 		return "", err
@@ -35,7 +35,7 @@ func (a *Api) ActionGet(actionId int) (XmlResponseActionGet, error) {
 	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseActionGet)
 
-	err := a.apiRequest(requestStruct, responseStruct)
+	err := a.apiRequest(&requestStruct, responseStruct)
 	if err != nil {
 		return XmlResponseActionGet{}, err
 	}
@@ -64,7 +64,7 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 
 	responseStruct := new(XmlResponseActionGetList)
 
-	err := a.apiRequest(requestStruct, responseStruct)
+	err := a.apiRequest(&requestStruct, responseStruct)
 	if err != nil {
 		log.Printf("[ERROR] %v", err)
 		return XmlResponseActionGetList{}, err
@@ -84,7 +84,7 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseAnaliticGetList)
 
-	err := a.apiRequest(requestStruct, responseStruct)
+	err := a.apiRequest(&requestStruct, responseStruct)
 	if err != nil {
 		log.Printf("[ERROR] %v", err)
 		return XmlResponseAnaliticGetList{}, err
@@ -104,7 +104,7 @@ func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions,
 	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseAnaliticGetOptions)
 
-	err := a.apiRequest(requestStruct, responseStruct)
+	err := a.apiRequest(&requestStruct, responseStruct)
 	if err != nil {
 		return XmlResponseAnaliticGetOptions{}, err
 	}
@@ -132,7 +132,7 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 
 	responseStruct := new(XmlResponseActionAdd)
 
-	err := a.apiRequest(requestStruct, responseStruct)
+	err := a.apiRequest(&requestStruct, responseStruct)
 	if err != nil {
 		log.Printf("[ERROR] %v", err)
 		return XmlResponseActionAdd{}, err
@@ -153,7 +153,7 @@ func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseTaskGet)
 
-	err := a.apiRequest(requestStruct, responseStruct)
+	err := a.apiRequest(&requestStruct, responseStruct)
 	if err != nil {
 		return XmlResponseTaskGet{}, err
 	}
@@ -172,7 +172,7 @@ func (a *Api) UserGet(userId int) (XmlResponseUserGet, error) {
 	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseUserGet)
 
-	err := a.apiRequest(requestStruct, responseStruct)
+	err := a.apiRequest(&requestStruct, responseStruct)
 	if err != nil {
 		return XmlResponseUserGet{}, err
 	}
