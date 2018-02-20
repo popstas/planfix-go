@@ -20,7 +20,6 @@ func (a Api) AuthLogin(user, password string) (string, error) {
 
 // action.get
 func (a *Api) ActionGet(actionId int) (XmlResponseActionGet, error) {
-	a.ensureAuthenticated()
 	requestStruct := XmlRequestActionGet{
 		ActionId: actionId,
 	}
@@ -34,7 +33,6 @@ func (a *Api) ActionGet(actionId int) (XmlResponseActionGet, error) {
 // action.getList
 func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseActionGetList, error) {
 	requestStruct.Method = "action.getList"
-	a.ensureAuthenticated()
 
 	// defaults
 	if requestStruct.PageCurrent == 0 {
@@ -52,7 +50,6 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 
 // analitic.getList
 func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
-	a.ensureAuthenticated()
 	requestStruct := XmlRequestAnaliticGetList{
 		AnaliticGroupId: groupId,
 	}
@@ -65,7 +62,6 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 
 // analitic.get
 func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions, error) {
-	a.ensureAuthenticated()
 	requestStruct := XmlRequestAnaliticGetOptions{
 		AnaliticId: analiticId,
 	}
@@ -79,7 +75,6 @@ func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions,
 // action.add
 func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd, error) {
 	requestStruct.Method = "action.add"
-	a.ensureAuthenticated()
 
 	// only task or contact allowed
 	if (requestStruct.TaskId > 0 || requestStruct.TaskGeneral > 0) && requestStruct.ContactGeneral > 0 {
@@ -94,7 +89,6 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 
 // task.get
 func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
-	a.ensureAuthenticated()
 	requestStruct := XmlRequestTaskGet{
 		TaskId:      taskId,
 		TaskGeneral: taskGeneral,
@@ -108,7 +102,6 @@ func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 
 // user.get
 func (a *Api) UserGet(userId int) (XmlResponseUserGet, error) {
-	a.ensureAuthenticated()
 	requestStruct := XmlRequestUserGet{
 		UserId: userId,
 	}

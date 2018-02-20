@@ -87,6 +87,7 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 
 func (a Api) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
 	requestStruct.SetAccount(a.Account)
+	a.ensureAuthenticated()
 	requestStruct.SetSid(a.Sid)
 
 	// first request
