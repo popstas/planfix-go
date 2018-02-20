@@ -127,6 +127,18 @@ func TestApi_AuthenticatedExpire(t *testing.T) {
 	assert(t, action.Action.TaskId, 1128468)
 }
 
+// error response after reauthenticated session
+func TestApi_AuthenticatedExpireFailed(t *testing.T) {
+	api := newApi([]string{
+		fixtureFromFile("error.sessionExpired.xml"),
+		fixtureFromFile("auth.login.xml"),
+		fixtureFromFile("error.xml"),
+	})
+	_, err := api.ActionGet(456)
+
+	expectError(t, err, "TestApi_AuthenticatedExpireFailed")
+}
+
 // action.get
 func TestApi_ActionGet(t *testing.T) {
 	api := newApi([]string{fixtureFromFile("action.get.xml")})
@@ -182,6 +194,19 @@ func TestApi_ActionAdd(t *testing.T) {
 
 	expectSuccess(t, err, "TestApi_ActionAdd")
 	assert(t, actionAdded.ActionId, 123)
+}
+
+// action.add both task and contact defined
+func TestApi_ActionAddBothTaskContact(t *testing.T) {
+	api := newApi([]string{fixtureFromFile("action.add.xml")})
+	request := planfix.XmlRequestActionAdd{
+		TaskGeneral:    123,
+		ContactGeneral: 123,
+		Description:    "asdf",
+	}
+	_, err := api.ActionAdd(request)
+
+	expectError(t, err, "TestApi_ActionAddBothTaskContact")
 }
 
 // task.get

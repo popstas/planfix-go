@@ -2,7 +2,6 @@ package planfix
 
 import (
 	"errors"
-	"log"
 )
 
 // auth.login
@@ -16,12 +15,7 @@ func (a Api) AuthLogin(user, password string) (string, error) {
 	responseStruct := new(XmlResponseAuth)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
-	if err != nil {
-		log.Printf("[ERROR] %v", err)
-		return "", err
-	}
-
-	return responseStruct.Sid, nil
+	return responseStruct.Sid, err
 }
 
 // action.get
@@ -34,19 +28,15 @@ func (a *Api) ActionGet(actionId int) (XmlResponseActionGet, error) {
 	responseStruct := new(XmlResponseActionGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
-	if err != nil {
-		return XmlResponseActionGet{}, err
-	}
-
-	return *responseStruct, nil
+	return *responseStruct, err
 }
 
 // action.getList
 func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseActionGetList, error) {
+	requestStruct.Method = "action.getList"
 	a.ensureAuthenticated()
 
 	// defaults
-	requestStruct.Method = "action.getList"
 	if requestStruct.PageCurrent == 0 {
 		requestStruct.PageCurrent = 1
 	}
@@ -57,12 +47,7 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 	responseStruct := new(XmlResponseActionGetList)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
-	if err != nil {
-		log.Printf("[ERROR] %v", err)
-		return XmlResponseActionGetList{}, err
-	}
-
-	return *responseStruct, nil
+	return *responseStruct, err
 }
 
 // analitic.getList
@@ -75,12 +60,7 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 	responseStruct := new(XmlResponseAnaliticGetList)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
-	if err != nil {
-		log.Printf("[ERROR] %v", err)
-		return XmlResponseAnaliticGetList{}, err
-	}
-
-	return *responseStruct, nil
+	return *responseStruct, err
 }
 
 // analitic.get
@@ -93,15 +73,12 @@ func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions,
 	responseStruct := new(XmlResponseAnaliticGetOptions)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
-	if err != nil {
-		return XmlResponseAnaliticGetOptions{}, err
-	}
-
-	return *responseStruct, nil
+	return *responseStruct, err
 }
 
 // action.add
 func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd, error) {
+	requestStruct.Method = "action.add"
 	a.ensureAuthenticated()
 
 	// only task or contact allowed
@@ -109,18 +86,10 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 		return XmlResponseActionAdd{}, errors.New("Both task and contact defined")
 	}
 
-	// defaults
-	requestStruct.Method = "action.add"
-
 	responseStruct := new(XmlResponseActionAdd)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
-	if err != nil {
-		log.Printf("[ERROR] %v", err)
-		return XmlResponseActionAdd{}, err
-	}
-
-	return *responseStruct, nil
+	return *responseStruct, err
 }
 
 // task.get
@@ -134,11 +103,7 @@ func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 	responseStruct := new(XmlResponseTaskGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
-	if err != nil {
-		return XmlResponseTaskGet{}, err
-	}
-
-	return *responseStruct, nil
+	return *responseStruct, err
 }
 
 // user.get
@@ -151,9 +116,5 @@ func (a *Api) UserGet(userId int) (XmlResponseUserGet, error) {
 	responseStruct := new(XmlResponseUserGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
-	if err != nil {
-		return XmlResponseUserGet{}, err
-	}
-
-	return *responseStruct, nil
+	return *responseStruct, err
 }
