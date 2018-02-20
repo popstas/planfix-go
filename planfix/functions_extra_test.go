@@ -6,7 +6,11 @@ import (
 )
 
 func TestApi_GetAnaliticByName(t *testing.T) {
-	api := newApi([]string{"analitic.getList.xml"})
+	api := newApi([]string{
+		fixtureFromFile("analitic.getList.xml"),
+		fixtureFromFile("analitic.getList.xml"),
+		fixtureFromFile("error.xml"),
+	})
 	var analitic planfix.XmlResponseAnalitic
 
 	// existent
@@ -19,7 +23,6 @@ func TestApi_GetAnaliticByName(t *testing.T) {
 	expectError(t, err, "TestApi_GetAnaliticByName non existent")
 
 	// error
-	api = newApi([]string{"error.xml"})
 	analitic, err = api.GetAnaliticByName("ldkfgjld")
 	expectError(t, err, "TestApi_GetAnaliticByName error")
 }
