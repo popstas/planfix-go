@@ -2,23 +2,26 @@ package planfix
 
 import "encoding/xml"
 
-/*type XmlRequest struct {
+// in all requests except auth.login
+type XmlRequester interface {
+	SetSid(sid string)
+	SetAccount(account string)
+}
+type XmlRequestAuth struct {
 	XMLName xml.Name `xml:"request"`
 	Method  string   `xml:"method,attr"`
+	Account string   `xml:"account"`
+	Sid     string   `xml:"sid"`
 }
 
-func (r xmlRequest) getMethod() string {
-	return r.Method
+func (a *XmlRequestAuth) SetSid(sid string) {
+	a.Sid = sid
 }
-func (r *xmlRequest) setMethod(m string) {
-	r.Method = m
+func (a *XmlRequestAuth) SetAccount(account string) {
+	a.Account = account
 }
 
-type xmlResponse struct {
-	XMLName xml.Name `xml:"response"`
-	Status  string   `xml:"status,attr"`
-}*/
-
+// in all responses
 type XmlResponseStatus struct {
 	XMLName xml.Name `xml:"response"`
 	Status  string   `xml:"status,attr"`
@@ -119,13 +122,18 @@ type XmlResponseUser struct {
 }
 
 // auth.login
-type XmlRequestAuth struct {
+type XmlRequestAuthLogin struct {
 	XMLName xml.Name `xml:"request"`
 	Method  string   `xml:"method,attr"`
 
 	Account  string `xml:"account"`
 	Login    string `xml:"login"`
 	Password string `xml:"password"`
+}
+
+func (a *XmlRequestAuthLogin) SetSid(sid string) {}
+func (a *XmlRequestAuthLogin) SetAccount(account string) {
+	a.Account = account
 }
 
 // auth.login response
@@ -136,12 +144,9 @@ type XmlResponseAuth struct {
 
 // action.get
 type XmlRequestActionGet struct {
-	XMLName xml.Name `xml:"request"`
-	Method  string   `xml:"method,attr"`
-	Account string   `xml:"account"`
-	Sid     string   `xml:"sid"`
-
-	ActionId int `xml:"action>id"`
+	XmlRequestAuth
+	XMLName  xml.Name `xml:"request"`
+	ActionId int      `xml:"action>id"`
 }
 
 // action.get response
@@ -152,10 +157,8 @@ type XmlResponseActionGet struct {
 
 // action.getList
 type XmlRequestActionGetList struct {
+	XmlRequestAuth
 	XMLName xml.Name `xml:"request"`
-	Method  string   `xml:"method,attr"`
-	Account string   `xml:"account"`
-	Sid     string   `xml:"sid"`
 
 	TaskId         int    `xml:"task>id,omitempty"`
 	TaskGeneral    int    `xml:"task>general,omitempty"`
@@ -177,10 +180,8 @@ type XmlResponseActionGetList struct {
 
 // action.add
 type XmlRequestActionAdd struct {
+	XmlRequestAuth
 	XMLName xml.Name `xml:"request"`
-	Method  string   `xml:"method,attr"`
-	Account string   `xml:"account"`
-	Sid     string   `xml:"sid"`
 
 	Description    string               `xml:"action>description"`
 	TaskId         int                  `xml:"action>task>id,omitempty"`
@@ -202,10 +203,8 @@ type XmlResponseActionAdd struct {
 
 // analitic.getList
 type XmlRequestAnaliticGetList struct {
+	XmlRequestAuth
 	XMLName xml.Name `xml:"request"`
-	Method  string   `xml:"method,attr"`
-	Account string   `xml:"account"`
-	Sid     string   `xml:"sid"`
 
 	AnaliticGroupId int `xml:"analiticGroupId,omitempty"`
 }
@@ -222,10 +221,8 @@ type XmlResponseAnaliticGetList struct {
 
 // analitic.getOptions
 type XmlRequestAnaliticGetOptions struct {
+	XmlRequestAuth
 	XMLName xml.Name `xml:"request"`
-	Method  string   `xml:"method,attr"`
-	Account string   `xml:"account"`
-	Sid     string   `xml:"sid"`
 
 	AnaliticId int `xml:"analitic>id"`
 }
@@ -238,10 +235,8 @@ type XmlResponseAnaliticGetOptions struct {
 
 // task.get
 type XmlRequestTaskGet struct {
+	XmlRequestAuth
 	XMLName xml.Name `xml:"request"`
-	Method  string   `xml:"method,attr"`
-	Account string   `xml:"account"`
-	Sid     string   `xml:"sid"`
 
 	TaskId      int `xml:"task>id,omitempty"`
 	TaskGeneral int `xml:"task>general,omitempty"`
@@ -255,10 +250,8 @@ type XmlResponseTaskGet struct {
 
 // user.get
 type XmlRequestUserGet struct {
+	XmlRequestAuth
 	XMLName xml.Name `xml:"request"`
-	Method  string   `xml:"method,attr"`
-	Account string   `xml:"account"`
-	Sid     string   `xml:"sid"`
 
 	UserId int `xml:"user>id,omitempty"`
 }

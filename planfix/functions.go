@@ -7,7 +7,7 @@ import (
 
 // auth.login
 func (a Api) AuthLogin(user, password string) (string, error) {
-	requestStruct := XmlRequestAuth{
+	requestStruct := XmlRequestAuthLogin{
 		Method:   "auth.login",
 		Account:  a.Account,
 		Login:    a.User,
@@ -28,11 +28,11 @@ func (a Api) AuthLogin(user, password string) (string, error) {
 func (a *Api) ActionGet(actionId int) (XmlResponseActionGet, error) {
 	a.ensureAuthenticated()
 	requestStruct := XmlRequestActionGet{
-		Method:   "action.get",
-		Account:  a.Account,
-		Sid:      a.Sid,
 		ActionId: actionId,
 	}
+	requestStruct.Method = "action.get"
+	requestStruct.SetAccount(a.Account)
+	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseActionGet)
 
 	err := a.apiRequest(requestStruct, responseStruct)
@@ -77,11 +77,11 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 	a.ensureAuthenticated()
 	requestStruct := XmlRequestAnaliticGetList{
-		Method:          "analitic.getList",
-		Account:         a.Account,
-		Sid:             a.Sid,
 		AnaliticGroupId: groupId,
 	}
+	requestStruct.Method = "analitic.getList"
+	requestStruct.SetAccount(a.Account)
+	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseAnaliticGetList)
 
 	err := a.apiRequest(requestStruct, responseStruct)
@@ -97,11 +97,11 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions, error) {
 	a.ensureAuthenticated()
 	requestStruct := XmlRequestAnaliticGetOptions{
-		Method:     "analitic.getOptions",
-		Account:    a.Account,
-		Sid:        a.Sid,
 		AnaliticId: analiticId,
 	}
+	requestStruct.Method = "analitic.getOptions"
+	requestStruct.SetAccount(a.Account)
+	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseAnaliticGetOptions)
 
 	err := a.apiRequest(requestStruct, responseStruct)
@@ -145,12 +145,12 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 	a.ensureAuthenticated()
 	requestStruct := XmlRequestTaskGet{
-		Method:      "task.get",
-		Account:     a.Account,
-		Sid:         a.Sid,
 		TaskId:      taskId,
 		TaskGeneral: taskGeneral,
 	}
+	requestStruct.Method = "task.get"
+	requestStruct.SetAccount(a.Account)
+	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseTaskGet)
 
 	err := a.apiRequest(requestStruct, responseStruct)
@@ -165,11 +165,11 @@ func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 func (a *Api) UserGet(userId int) (XmlResponseUserGet, error) {
 	a.ensureAuthenticated()
 	requestStruct := XmlRequestUserGet{
-		Method:  "user.get",
-		Account: a.Account,
-		Sid:     a.Sid,
-		UserId:  userId,
+		UserId: userId,
 	}
+	requestStruct.Method = "user.get"
+	requestStruct.SetAccount(a.Account)
+	requestStruct.SetSid(a.Sid)
 	responseStruct := new(XmlResponseUserGet)
 
 	err := a.apiRequest(requestStruct, responseStruct)
