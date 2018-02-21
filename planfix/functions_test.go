@@ -105,7 +105,7 @@ func TestApi_AuthLogin(t *testing.T) {
 	answer, err := api.AuthLogin(api.User, api.Password)
 
 	expectSuccess(t, err, "TestApi_AuthLogin")
-	assert(t, answer, "123")
+	assert(t, answer, "sid_after_login")
 }
 
 // authenticate before api request if not authenticated
@@ -117,7 +117,7 @@ func TestApi_EnsureAuthenticated(t *testing.T) {
 	})
 	api.Sid = ""
 	_, _ = api.ActionGet(456)
-	assert(t, api.Sid, "123")
+	assert(t, api.Sid, "sid_after_login")
 
 	api.Sid = "789"
 	_, _ = api.ActionGet(456)

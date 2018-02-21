@@ -1,6 +1,9 @@
 package planfix
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"log"
+)
 
 // in all requests except auth.login
 type XmlRequester interface {
@@ -16,6 +19,7 @@ type XmlRequestAuth struct {
 }
 
 func (a *XmlRequestAuth) SetSid(sid string) {
+	log.Printf("[DEBUG] setSid: %s", sid)
 	a.Sid = sid
 }
 func (a *XmlRequestAuth) SetAccount(account string) {
