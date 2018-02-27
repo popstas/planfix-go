@@ -193,6 +193,17 @@ func TestApi_AnaliticGetOptions(t *testing.T) {
 	assert(t, analitic.Analitic.Fields[0].HandbookId, 131)
 }
 
+// analitic.getHandbook
+func TestApi_AnaliticGetHandbook(t *testing.T) {
+	api := newApi([]string{fixtureFromFile("analitic.getHandbook.xml")})
+	var handbook planfix.XmlResponseAnaliticGetHandbook
+	handbook, err := api.AnaliticGetHandbook(123)
+
+	expectSuccess(t, err, "TestApi_AnaliticGetHandbook")
+	assert(t, handbook.Records[4].Values[0].Value, "Поминутная работа программиста")
+	assert(t, handbook.Records[4].ValuesMap["Название"], "Поминутная работа программиста")
+}
+
 // action.add
 func TestApi_ActionAdd(t *testing.T) {
 	api := newApi([]string{fixtureFromFile("action.add.xml")})

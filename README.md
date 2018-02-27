@@ -19,6 +19,7 @@
 - action.get
 - action.getList
 - action.add
+- analitic.getHandbook
 - analitic.getList
 - analitic.getOptions
 - task.get

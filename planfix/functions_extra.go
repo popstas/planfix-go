@@ -18,3 +18,17 @@ func (a *Api) GetAnaliticByName(searchName string) (XmlResponseAnalitic, error) 
 	}
 	return XmlResponseAnalitic{}, errors.New(fmt.Sprintf("Analitic %s not found", searchName))
 }
+
+func (a *Api) GetHandbookRecordByName(handbookId int, searchName string) (XmlResponseAnaliticHandbookRecord, error) {
+	var handbook XmlResponseAnaliticGetHandbook
+	handbook, err := a.AnaliticGetHandbook(handbookId)
+	if err != nil {
+		return XmlResponseAnaliticHandbookRecord{}, err
+	}
+	for _, record := range handbook.Records {
+		if record.ValuesMap["Название"] == searchName {
+			return record, nil
+		}
+	}
+	return XmlResponseAnaliticHandbookRecord{}, errors.New(fmt.Sprintf("Record %s not found", searchName))
+}

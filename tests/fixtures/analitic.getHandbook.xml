@@ -1,0 +1,40 @@
+<response status="ok">
+    <records>
+        <record>
+            <parentKey>214</parentKey>
+            <isGroup>1</isGroup>
+            <key>750</key>
+            <value value="Расследования" name="" isDisplayed="0"/>
+        </record>
+        <record>
+            <parentKey>750</parentKey>
+            <isGroup>1</isGroup>
+            <key>795</key>
+            <value value="1 этап. Продумывание" name="" isDisplayed="0"/>
+        </record>
+        <record>
+            <parentKey>750</parentKey>
+            <isGroup>1</isGroup>
+            <key>796</key>
+            <value value="2 этап. Сбор материала" name="" isDisplayed="0"/>
+        </record>
+        <record>
+            <parentKey>0</parentKey>
+            <isGroup>1</isGroup>
+            <key>389</key>
+            <value value="Программирование" name="" isDisplayed="0"/>
+        </record>
+        <record>
+            <parentKey>389</parentKey>
+            <isGroup>0</isGroup>
+            <key>725</key>
+            <value value="Поминутная работа программиста" name="Название" isDisplayed="0"/>
+            <value value="" name="Описание" isDisplayed="0"/>
+            <value value="минута" name="Единица измерения" isDisplayed="0"/>
+            <value value="0.01667" name="Нормочасы" isDisplayed="0"/>
+            <value value="1" name="Идёт в учет работ по Клиенту" isDisplayed="0"/>
+            <value value="3" name="Тип работ" isDisplayed="0"/>
+            <value value="" name="В баллах" isDisplayed="0"/>
+        </record>
+    </records>
+</response>

@@ -26,3 +26,25 @@ func TestApi_GetAnaliticByName(t *testing.T) {
 	analitic, err = api.GetAnaliticByName("ldkfgjld")
 	expectError(t, err, "TestApi_GetAnaliticByName error")
 }
+
+func TestApi_GetHandbookRecordByName(t *testing.T) {
+	api := newApi([]string{
+		fixtureFromFile("analitic.getHandbook.xml"),
+		fixtureFromFile("analitic.getHandbook.xml"),
+		fixtureFromFile("error.xml"),
+	})
+	var record planfix.XmlResponseAnaliticHandbookRecord
+
+	// existent
+	record, err := api.GetHandbookRecordByName(123, "Поминутная работа программиста")
+	expectSuccess(t, err, "TestApi_GetHandbookRecordByName Поминутная работа программиста")
+	assert(t, record.ValuesMap["Название"], "Поминутная работа программиста")
+
+	// non existent
+	record, err = api.GetHandbookRecordByName(123, "ldkfgjld")
+	expectError(t, err, "TestApi_GetHandbookRecordByName non existent")
+
+	// error
+	record, err = api.GetHandbookRecordByName(123, "ldkfgjld")
+	expectError(t, err, "TestApi_GetHandbookRecordByName error")
+}

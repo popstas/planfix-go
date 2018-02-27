@@ -69,6 +69,20 @@ type XmlResponseAnaliticOptionsField struct {
 	HandbookId int      `xml:"hanbook>id"`
 }
 
+type XmlResponseAnaliticHandbookRecord struct {
+	Key       int                                       `xml:"key"`
+	ParentKey int                                       `xml:"parentKey"`
+	IsGroup   int                                       `xml:"isGroup"`
+	Values    []XmlResponseAnaliticHandbookRecordValues `xml:"value"`
+	ValuesMap map[string]string
+}
+
+type XmlResponseAnaliticHandbookRecordValues struct {
+	Name        string `xml:"name,attr"`
+	Value       string `xml:"value,attr"`
+	IsDisplayed int    `xml:"isDisplayed,attr"`
+}
+
 type XmlResponseAction struct {
 	Id                           int                         `xml:"id"`
 	Description                  string                      `xml:"description"`
@@ -242,6 +256,20 @@ type XmlRequestAnaliticGetOptions struct {
 type XmlResponseAnaliticGetOptions struct {
 	XMLName  xml.Name                   `xml:"response"`
 	Analitic XmlResponseAnaliticOptions `xml:"analitic"`
+}
+
+// analitic.getHandbook
+type XmlRequestAnaliticGetHandbook struct {
+	XmlRequestAuth
+	XMLName xml.Name `xml:"request"`
+
+	HandbookId int `xml:"handbook>id"`
+}
+
+// analitic.getHandbook response
+type XmlResponseAnaliticGetHandbook struct {
+	XMLName xml.Name                            `xml:"response"`
+	Records []XmlResponseAnaliticHandbookRecord `xml:"records>record"`
 }
 
 // task.get

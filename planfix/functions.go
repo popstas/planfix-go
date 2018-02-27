@@ -60,6 +60,28 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 	return *responseStruct, err
 }
 
+// analitic.getHandbook
+func (a *Api) AnaliticGetHandbook(handbookId int) (XmlResponseAnaliticGetHandbook, error) {
+	requestStruct := XmlRequestAnaliticGetHandbook{
+		HandbookId: handbookId,
+	}
+	requestStruct.Method = "analitic.getHandbook"
+	responseStruct := new(XmlResponseAnaliticGetHandbook)
+
+	err := a.apiRequest(&requestStruct, responseStruct)
+
+	// map from values list
+	for rid, record := range responseStruct.Records {
+		record.ValuesMap = make(map[string]string)
+		for _, value := range record.Values {
+			record.ValuesMap[value.Name] = value.Value
+		}
+		responseStruct.Records[rid] = record
+	}
+
+	return *responseStruct, err
+}
+
 // analitic.get
 func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions, error) {
 	requestStruct := XmlRequestAnaliticGetOptions{
