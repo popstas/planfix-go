@@ -36,7 +36,7 @@ func (a *Api) ensureAuthenticated() error {
 	if a.Sid == "" {
 		sid, err := a.AuthLogin(a.User, a.Password)
 		if err != nil {
-			log.Fatalf("Failed to authenticate to planfix.ru, %v", err)
+			log.Println("[ERROR] Failed to authenticate to planfix.ru, %v", err)
 			return err
 		}
 		a.Sid = sid
@@ -88,7 +88,9 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 func (a *Api) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
 	requestStruct.SetAccount(a.Account)
 	if requestStruct.GetMethod() != "auth.login" {
-		a.ensureAuthenticated()
+		if err := a.ensureAuthenticated(); err != nil {
+			return err
+		}
 		requestStruct.SetSid(a.Sid)
 	}
 
@@ -101,14 +103,17 @@ func (a *Api) apiRequest(requestStruct XmlRequester, responseStruct interface{})
 		if status.Code == "0005" { // session expired
 			log.Println("[INFO] session expired, relogin")
 			a.Sid = ""
-			a.ensureAuthenticated()
+			if err := a.ensureAuthenticated(); err != nil {
+				return err
+			}
 			requestStruct.SetSid(a.Sid)
 
 			// second request
 			status, data, err = a.tryRequest(requestStruct)
 			if status.Status != "ok" {
 				return errors.New(fmt.Sprintf(
-					"response status: %s, %s, %s",
+					"%s: response status: %s, %s, %s",
+					requestStruct.GetMethod(),
 					status.Status,
 					a.getErrorByCode(status.Code),
 					status.Message,
@@ -118,7 +123,8 @@ func (a *Api) apiRequest(requestStruct XmlRequester, responseStruct interface{})
 			return err
 		} else {
 			return errors.New(fmt.Sprintf(
-				"response status: %s, %s, %s",
+				"%s: response status: %s, %s, %s",
+				requestStruct.GetMethod(),
 				status.Status,
 				a.getErrorByCode(status.Code),
 				status.Message,

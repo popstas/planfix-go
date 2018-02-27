@@ -108,6 +108,15 @@ func TestApi_AuthLogin(t *testing.T) {
 	assert(t, answer, "sid_after_login")
 }
 
+// error response after reauthenticated session
+func TestApi_EnsureAuthenticatedFailed(t *testing.T) {
+	api := newApi([]string{fixtureFromFile("error.xml")})
+	api.Sid = ""
+	_, err := api.ActionGet(456)
+
+	expectError(t, err, "TestApi_EnsureAuthenticatedFailed")
+}
+
 // authenticate before api request if not authenticated
 func TestApi_EnsureAuthenticated(t *testing.T) {
 	api := newApi([]string{
