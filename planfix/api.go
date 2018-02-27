@@ -36,7 +36,7 @@ func (a *Api) ensureAuthenticated() error {
 	if a.Sid == "" {
 		sid, err := a.AuthLogin(a.User, a.Password)
 		if err != nil {
-			log.Println("[ERROR] Failed to authenticate to planfix.ru, %v", err)
+			log.Printf("[ERROR] Failed to authenticate to planfix.ru, %v", err)
 			return err
 		}
 		a.Sid = sid
