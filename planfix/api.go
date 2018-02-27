@@ -94,23 +94,29 @@ func (a *Api) apiRequest(requestStruct XmlRequester, responseStruct interface{})
 		requestStruct.SetSid(a.Sid)
 	}
 
-	// first request
-	status, data, err := a.tryRequest(requestStruct)
-	if err != nil {
-		return err
-	}
-	if status.Status != "ok" {
-		if status.Code == "0005" { // session expired
-			log.Println("[INFO] session expired, relogin")
-			a.Sid = ""
-			if err := a.ensureAuthenticated(); err != nil {
-				return err
-			}
-			requestStruct.SetSid(a.Sid)
+	var (
+		status XmlResponseStatus
+		data   []byte
+		err    error
+	)
 
-			// second request
-			status, data, err = a.tryRequest(requestStruct)
-			if status.Status != "ok" {
+	for try := 0; try < 2; try++ {
+		status, data, err = a.tryRequest(requestStruct)
+		if err != nil {
+			return err
+		}
+
+		if status.Status == "ok" {
+			break
+		} else {
+			if status.Code == "0005" { // session expired
+				log.Println("[INFO] session expired, relogin")
+				a.Sid = ""
+				if err := a.ensureAuthenticated(); err != nil {
+					return err
+				}
+				requestStruct.SetSid(a.Sid)
+			} else {
 				return errors.New(fmt.Sprintf(
 					"%s: response status: %s, %s, %s",
 					requestStruct.GetMethod(),
@@ -119,16 +125,6 @@ func (a *Api) apiRequest(requestStruct XmlRequester, responseStruct interface{})
 					status.Message,
 				))
 			}
-			err = xml.Unmarshal(data, &responseStruct)
-			return err
-		} else {
-			return errors.New(fmt.Sprintf(
-				"%s: response status: %s, %s, %s",
-				requestStruct.GetMethod(),
-				status.Status,
-				a.getErrorByCode(status.Code),
-				status.Message,
-			))
 		}
 	}
 

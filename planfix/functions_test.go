@@ -108,7 +108,7 @@ func TestApi_AuthLogin(t *testing.T) {
 	assert(t, answer, "sid_after_login")
 }
 
-// error response after reauthenticated session
+// fail to authenticate
 func TestApi_EnsureAuthenticatedFailed(t *testing.T) {
 	api := newApi([]string{fixtureFromFile("error.xml")})
 	api.Sid = ""
