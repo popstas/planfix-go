@@ -65,13 +65,19 @@ func (s *MockedServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 		log.Println(body)
 		panic(err)
 	}
+	s.Requests = append(s.Requests, lastRequest)
+	answer := s.Responses[0]
 
-	if err != nil {
+	// simulate network error
+	if answer == "panic" {
 		log.Println(body)
 		panic(err)
 	}
-	s.Requests = append(s.Requests, lastRequest)
-	answer := s.Responses[0]
+
+	// simulate 502
+	if answer == "502" {
+		resp.WriteHeader(http.StatusBadGateway)
+	}
 	s.Responses = s.Responses[1:]
 	resp.Write([]byte(answer))
 }
@@ -146,8 +152,19 @@ func TestApi_AuthenticatedExpire(t *testing.T) {
 	assert(t, action.Action.TaskId, 1128468)
 }
 
-// error response after reauthenticated session
+// error response while reauthenticate
 func TestApi_AuthenticatedExpireFailed(t *testing.T) {
+	api := newApi([]string{
+		fixtureFromFile("error.sessionExpired.xml"),
+		fixtureFromFile("error.xml"),
+	})
+	_, err := api.ActionGet(456)
+
+	expectError(t, err, "TestApi_AuthenticatedExpireFailed")
+}
+
+// error response after reauthenticated session
+func TestApi_AuthenticatedExpireFailedAfter(t *testing.T) {
 	api := newApi([]string{
 		fixtureFromFile("error.sessionExpired.xml"),
 		fixtureFromFile("auth.login.xml"),
@@ -155,7 +172,28 @@ func TestApi_AuthenticatedExpireFailed(t *testing.T) {
 	})
 	_, err := api.ActionGet(456)
 
-	expectError(t, err, "TestApi_AuthenticatedExpireFailed")
+	expectError(t, err, "TestApi_AuthenticatedExpireFailedAfter")
+}
+
+// invalid xml
+func TestApi_InvalidXml(t *testing.T) {
+	api := newApi([]string{fixtureFromFile("error.invalidXml.xml")})
+	_, err := api.ActionGet(123)
+	expectError(t, err, "TestApi_InvalidXml")
+}
+
+// network error
+func TestApi_NetworkError(t *testing.T) {
+	api := newApi([]string{"panic"})
+	_, err := api.ActionGet(123)
+	expectError(t, err, "TestApi_NetworkError")
+}
+
+// 502 error
+func TestApi_502Error(t *testing.T) {
+	api := newApi([]string{"502"})
+	_, err := api.ActionGet(123)
+	expectError(t, err, "TestApi_502Error")
 }
 
 // action.get

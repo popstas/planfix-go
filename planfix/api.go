@@ -46,10 +46,7 @@ func (a *Api) ensureAuthenticated() error {
 
 func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, data []byte, err error) {
 	//xmlBytes, err := xml.MarshalIndent(requestStruct, "  ", "    ")
-	xmlBytes, err := xml.Marshal(requestStruct)
-	if err != nil {
-		return status, data, err
-	}
+	xmlBytes, _ := xml.Marshal(requestStruct)
 	xmlString := xml.Header + string(xmlBytes)
 
 	// logging
@@ -72,7 +69,7 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return status, data, fmt.Errorf("status error: %v", resp.StatusCode)
+		return status, data, fmt.Errorf("[ERROR] status error: %v", resp.StatusCode)
 	}
 
 	data, err = ioutil.ReadAll(resp.Body)
