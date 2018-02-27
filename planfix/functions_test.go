@@ -190,6 +190,7 @@ func TestApi_AnaliticGetOptions(t *testing.T) {
 
 	expectSuccess(t, err, "TestApi_AnaliticGetOptions")
 	assert(t, analitic.Analitic.GroupId, 1)
+	assert(t, analitic.Analitic.Fields[0].HandbookId, 131)
 }
 
 // action.add

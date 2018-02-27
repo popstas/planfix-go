@@ -66,7 +66,7 @@ type XmlResponseAnaliticOptionsField struct {
 	Name       string   `xml:"name"`
 	Type       string   `xml:"type"`
 	ListValues []string `xml:"list>value"`
-	HandbookId int      `xml:"handbook>id"`
+	HandbookId int      `xml:"hanbook>id"`
 }
 
 type XmlResponseAction struct {
