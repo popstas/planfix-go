@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 )
@@ -19,6 +20,7 @@ type Api struct {
 	User      string
 	Password  string
 	UserAgent string
+	Logger    *log.Logger
 }
 
 func New(url, apiKey, account, user, password string) Api {
@@ -29,6 +31,7 @@ func New(url, apiKey, account, user, password string) Api {
 		User:      user,
 		Password:  password,
 		UserAgent: "planfix-go",
+		Logger:    log.New(os.Stderr, "[planfix-go] ", log.LstdFlags),
 	}
 }
 
@@ -36,7 +39,7 @@ func (a *Api) ensureAuthenticated() error {
 	if a.Sid == "" {
 		sid, err := a.AuthLogin(a.User, a.Password)
 		if err != nil {
-			log.Printf("[ERROR] Failed to authenticate to planfix.ru, %v", err)
+			a.Logger.Printf("[ERROR] Failed to authenticate to planfix.ru, %v", err)
 			return err
 		}
 		a.Sid = sid
@@ -51,7 +54,7 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 
 	// logging
 	passwordCutter := regexp.MustCompile(`<password>.*?</password>`)
-	log.Printf(
+	a.Logger.Printf(
 		"[DEBUG] request to planfix: %s",
 		passwordCutter.ReplaceAllString(string(xmlBytes), "<password>***</password>"),
 	)
@@ -73,7 +76,7 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 	}
 
 	data, err = ioutil.ReadAll(resp.Body)
-	log.Printf(
+	a.Logger.Printf(
 		"[DEBUG] response from planfix: %s",
 		strings.Replace(string(data), "\n", "", -1),
 	)
@@ -107,7 +110,7 @@ func (a *Api) apiRequest(requestStruct XmlRequester, responseStruct interface{})
 			break
 		} else {
 			if status.Code == "0005" { // session expired
-				log.Println("[INFO] session expired, relogin")
+				a.Logger.Println("[INFO] session expired, relogin")
 				a.Sid = ""
 				if err := a.ensureAuthenticated(); err != nil {
 					return err

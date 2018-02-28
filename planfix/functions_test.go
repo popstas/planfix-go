@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"github.com/popstas/planfix-go/planfix"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -57,12 +56,11 @@ func NewMockedServer(responses []string) *MockedServer {
 
 func (s *MockedServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	lastRequest, err := ioutil.ReadAll(req.Body)
-	body := string(lastRequest)
+	//body := string(lastRequest)
 
 	rs := requestStruct{}
 	err = xml.Unmarshal(lastRequest, &rs)
 	if err != nil {
-		log.Println(body)
 		panic(err)
 	}
 	s.Requests = append(s.Requests, lastRequest)
@@ -70,7 +68,6 @@ func (s *MockedServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 
 	// simulate network error
 	if answer == "panic" {
-		log.Println(body)
 		panic(err)
 	}
 
