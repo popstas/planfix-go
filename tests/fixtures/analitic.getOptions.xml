@@ -11,9 +11,9 @@
                 <num>0</num>
                 <name>Вид работы</name>
                 <type>HANDBOOK</type>
-                <hanbook>
+                <handbook>
                     <id>131</id>
-                </hanbook>
+                </handbook>
             </field>
             <field>
                 <id>743</id>
