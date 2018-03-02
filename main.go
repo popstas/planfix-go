@@ -23,5 +23,5 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Printf("action.getList result: %d", actionList.Actions.Actions)
+	fmt.Printf("action.getList result: %v", actionList.Actions.Actions)
 }

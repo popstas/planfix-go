@@ -171,7 +171,7 @@ type XMLRequestAuthLogin struct {
 	Password string `xml:"password"`
 }
 
-// SetSid - заглушка, чтобы реализовать интерфейс
+// - SetSid - заглушка, чтобы реализовать интерфейс
 func (a *XMLRequestAuthLogin) SetSid(sid string) {}
 
 // SetAccount задает account
