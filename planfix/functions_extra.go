@@ -19,9 +19,9 @@ func (a *Api) GetAnaliticByName(searchName string) (XmlResponseAnalitic, error) 
 	return XmlResponseAnalitic{}, errors.New(fmt.Sprintf("Analitic %s not found", searchName))
 }
 
-func (a *Api) GetHandbookRecordByName(handbookId int, searchName string) (XmlResponseAnaliticHandbookRecord, error) {
+func (a *Api) GetHandbookRecordByName(handbookID int, searchName string) (XmlResponseAnaliticHandbookRecord, error) {
 	var handbook XmlResponseAnaliticGetHandbook
-	handbook, err := a.AnaliticGetHandbook(handbookId)
+	handbook, err := a.AnaliticGetHandbook(handbookID)
 	if err != nil {
 		return XmlResponseAnaliticHandbookRecord{}, err
 	}

@@ -19,9 +19,9 @@ func (a Api) AuthLogin(user, password string) (string, error) {
 }
 
 // action.get
-func (a *Api) ActionGet(actionId int) (XmlResponseActionGet, error) {
+func (a *Api) ActionGet(actionID int) (XmlResponseActionGet, error) {
 	requestStruct := XmlRequestActionGet{
-		ActionId: actionId,
+		ActionID: actionID,
 	}
 	requestStruct.Method = "action.get"
 	responseStruct := new(XmlResponseActionGet)
@@ -49,9 +49,9 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 }
 
 // analitic.getList
-func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
+func (a *Api) AnaliticGetList(groupID int) (XmlResponseAnaliticGetList, error) {
 	requestStruct := XmlRequestAnaliticGetList{
-		AnaliticGroupId: groupId,
+		AnaliticGroupID: groupID,
 	}
 	requestStruct.Method = "analitic.getList"
 	responseStruct := new(XmlResponseAnaliticGetList)
@@ -61,9 +61,9 @@ func (a *Api) AnaliticGetList(groupId int) (XmlResponseAnaliticGetList, error) {
 }
 
 // analitic.getHandbook
-func (a *Api) AnaliticGetHandbook(handbookId int) (XmlResponseAnaliticGetHandbook, error) {
+func (a *Api) AnaliticGetHandbook(handbookID int) (XmlResponseAnaliticGetHandbook, error) {
 	requestStruct := XmlRequestAnaliticGetHandbook{
-		HandbookId: handbookId,
+		HandbookID: handbookID,
 	}
 	requestStruct.Method = "analitic.getHandbook"
 	responseStruct := new(XmlResponseAnaliticGetHandbook)
@@ -83,9 +83,9 @@ func (a *Api) AnaliticGetHandbook(handbookId int) (XmlResponseAnaliticGetHandboo
 }
 
 // analitic.get
-func (a *Api) AnaliticGetOptions(analiticId int) (XmlResponseAnaliticGetOptions, error) {
+func (a *Api) AnaliticGetOptions(analiticID int) (XmlResponseAnaliticGetOptions, error) {
 	requestStruct := XmlRequestAnaliticGetOptions{
-		AnaliticId: analiticId,
+		AnaliticID: analiticID,
 	}
 	requestStruct.Method = "analitic.getOptions"
 	responseStruct := new(XmlResponseAnaliticGetOptions)
@@ -99,7 +99,7 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 	requestStruct.Method = "action.add"
 
 	// only task or contact allowed
-	if (requestStruct.TaskId > 0 || requestStruct.TaskGeneral > 0) && requestStruct.ContactGeneral > 0 {
+	if (requestStruct.TaskID > 0 || requestStruct.TaskGeneral > 0) && requestStruct.ContactGeneral > 0 {
 		return XmlResponseActionAdd{}, errors.New("Both task and contact defined")
 	}
 
@@ -110,9 +110,9 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 }
 
 // task.get
-func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
+func (a *Api) TaskGet(taskID, taskGeneral int) (XmlResponseTaskGet, error) {
 	requestStruct := XmlRequestTaskGet{
-		TaskId:      taskId,
+		TaskID:      taskID,
 		TaskGeneral: taskGeneral,
 	}
 	requestStruct.Method = "task.get"
@@ -123,9 +123,9 @@ func (a *Api) TaskGet(taskId, taskGeneral int) (XmlResponseTaskGet, error) {
 }
 
 // user.get
-func (a *Api) UserGet(userId int) (XmlResponseUserGet, error) {
+func (a *Api) UserGet(userID int) (XmlResponseUserGet, error) {
 	requestStruct := XmlRequestUserGet{
-		UserId: userId,
+		UserID: userID,
 	}
 	requestStruct.Method = "user.get"
 	responseStruct := new(XmlResponseUserGet)

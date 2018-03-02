@@ -146,7 +146,7 @@ func TestApi_AuthenticatedExpire(t *testing.T) {
 	action, err := api.ActionGet(456)
 
 	expectSuccess(t, err, "TestApi_AuthenticatedExpire")
-	assert(t, action.Action.TaskId, 1128468)
+	assert(t, action.Action.TaskID, 1128468)
 }
 
 // error response while reauthenticate
@@ -200,7 +200,7 @@ func TestApi_ActionGet(t *testing.T) {
 	action, err := api.ActionGet(123)
 
 	expectSuccess(t, err, "TestApi_ActionGet")
-	assert(t, action.Action.TaskId, 1128468)
+	assert(t, action.Action.TaskID, 1128468)
 }
 
 // action.getList
@@ -233,8 +233,8 @@ func TestApi_AnaliticGetOptions(t *testing.T) {
 	analitic, err := api.AnaliticGetOptions(123)
 
 	expectSuccess(t, err, "TestApi_AnaliticGetOptions")
-	assert(t, analitic.Analitic.GroupId, 1)
-	assert(t, analitic.Analitic.Fields[0].HandbookId, 131)
+	assert(t, analitic.Analitic.GroupID, 1)
+	assert(t, analitic.Analitic.Fields[0].HandbookID, 131)
 }
 
 // analitic.getHandbook
@@ -259,7 +259,7 @@ func TestApi_ActionAdd(t *testing.T) {
 	actionAdded, err := api.ActionAdd(request)
 
 	expectSuccess(t, err, "TestApi_ActionAdd")
-	assert(t, actionAdded.ActionId, 123)
+	assert(t, actionAdded.ActionID, 123)
 }
 
 // action.add both task and contact defined
@@ -282,7 +282,7 @@ func TestApi_TaskGet(t *testing.T) {
 	task, err := api.TaskGet(123, 0)
 
 	expectSuccess(t, err, "TestApi_TaskGet")
-	assert(t, task.Task.ProjectId, 9830)
+	assert(t, task.Task.ProjectID, 9830)
 }
 
 // user.get
