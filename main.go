@@ -16,8 +16,8 @@ func main() {
 	)
 	planfixAPI.UserAgent = "planfix-toggl"
 
-	var actionList planfix.XmlResponseActionGetList
-	actionList, err := planfixAPI.ActionGetList(planfix.XmlRequestActionGetList{
+	var actionList planfix.XMLResponseActionGetList
+	actionList, err := planfixAPI.ActionGetList(planfix.XMLRequestActionGetList{
 		TaskGeneral: 123,
 	})
 	if err != nil {
