@@ -2,7 +2,6 @@ package planfix
 
 import (
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -117,13 +116,13 @@ func (a *API) apiRequest(requestStruct XmlRequester, responseStruct interface{})
 				}
 				requestStruct.SetSid(a.Sid)
 			} else {
-				return errors.New(fmt.Sprintf(
+				return fmt.Errorf(
 					"%s: response status: %s, %s, %s",
 					requestStruct.GetMethod(),
 					status.Status,
 					a.getErrorByCode(status.Code),
 					status.Message,
-				))
+				)
 			}
 		}
 	}

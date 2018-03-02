@@ -1,7 +1,6 @@
 package planfix
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -16,7 +15,7 @@ func (a *API) GetAnaliticByName(searchName string) (XmlResponseAnalitic, error) 
 			return analitic, nil
 		}
 	}
-	return XmlResponseAnalitic{}, errors.New(fmt.Sprintf("Analitic %s not found", searchName))
+	return XmlResponseAnalitic{}, fmt.Errorf("Analitic %s not found", searchName)
 }
 
 func (a *API) GetHandbookRecordByName(handbookID int, searchName string) (XmlResponseAnaliticHandbookRecord, error) {
@@ -30,5 +29,5 @@ func (a *API) GetHandbookRecordByName(handbookID int, searchName string) (XmlRes
 			return record, nil
 		}
 	}
-	return XmlResponseAnaliticHandbookRecord{}, errors.New(fmt.Sprintf("Record %s not found", searchName))
+	return XmlResponseAnaliticHandbookRecord{}, fmt.Errorf("Record %s not found", searchName)
 }

@@ -112,7 +112,6 @@ func (a API) getErrorByCode(code string) string {
 
 	if msg, ok := errorCodes[code]; ok {
 		return msg
-	} else {
-		return "Неизвестная ошибка"
 	}
+	return "Неизвестная ошибка"
 }
