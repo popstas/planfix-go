@@ -11,7 +11,7 @@ func TestAPI_GetAnaliticByName(t *testing.T) {
 		fixtureFromFile("analitic.getList.xml"),
 		fixtureFromFile("error.xml"),
 	})
-	var analitic planfix.XmlResponseAnalitic
+	var analitic planfix.XMLResponseAnalitic
 
 	// existent
 	analitic, err := api.GetAnaliticByName("Выработка")
@@ -33,7 +33,7 @@ func TestAPI_GetHandbookRecordByName(t *testing.T) {
 		fixtureFromFile("analitic.getHandbook.xml"),
 		fixtureFromFile("error.xml"),
 	})
-	var record planfix.XmlResponseAnaliticHandbookRecord
+	var record planfix.XMLResponseAnaliticHandbookRecord
 
 	// existent
 	record, err := api.GetHandbookRecordByName(123, "Поминутная работа программиста")

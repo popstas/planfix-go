@@ -6,32 +6,32 @@ import (
 
 // auth.login
 func (a API) AuthLogin(user, password string) (string, error) {
-	requestStruct := XmlRequestAuthLogin{
+	requestStruct := XMLRequestAuthLogin{
 		Method:   "auth.login",
 		Account:  a.Account,
 		Login:    a.User,
 		Password: a.Password,
 	}
-	responseStruct := new(XmlResponseAuth)
+	responseStruct := new(XMLResponseAuth)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return responseStruct.Sid, err
 }
 
 // action.get
-func (a *API) ActionGet(actionID int) (XmlResponseActionGet, error) {
-	requestStruct := XmlRequestActionGet{
+func (a *API) ActionGet(actionID int) (XMLResponseActionGet, error) {
+	requestStruct := XMLRequestActionGet{
 		ActionID: actionID,
 	}
 	requestStruct.Method = "action.get"
-	responseStruct := new(XmlResponseActionGet)
+	responseStruct := new(XMLResponseActionGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return *responseStruct, err
 }
 
 // action.getList
-func (a *API) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseActionGetList, error) {
+func (a *API) ActionGetList(requestStruct XMLRequestActionGetList) (XMLResponseActionGetList, error) {
 	requestStruct.Method = "action.getList"
 
 	// defaults
@@ -42,31 +42,31 @@ func (a *API) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 		requestStruct.PageSize = 100
 	}
 
-	responseStruct := new(XmlResponseActionGetList)
+	responseStruct := new(XMLResponseActionGetList)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return *responseStruct, err
 }
 
 // analitic.getList
-func (a *API) AnaliticGetList(groupID int) (XmlResponseAnaliticGetList, error) {
-	requestStruct := XmlRequestAnaliticGetList{
+func (a *API) AnaliticGetList(groupID int) (XMLResponseAnaliticGetList, error) {
+	requestStruct := XMLRequestAnaliticGetList{
 		AnaliticGroupID: groupID,
 	}
 	requestStruct.Method = "analitic.getList"
-	responseStruct := new(XmlResponseAnaliticGetList)
+	responseStruct := new(XMLResponseAnaliticGetList)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return *responseStruct, err
 }
 
 // analitic.getHandbook
-func (a *API) AnaliticGetHandbook(handbookID int) (XmlResponseAnaliticGetHandbook, error) {
-	requestStruct := XmlRequestAnaliticGetHandbook{
+func (a *API) AnaliticGetHandbook(handbookID int) (XMLResponseAnaliticGetHandbook, error) {
+	requestStruct := XMLRequestAnaliticGetHandbook{
 		HandbookID: handbookID,
 	}
 	requestStruct.Method = "analitic.getHandbook"
-	responseStruct := new(XmlResponseAnaliticGetHandbook)
+	responseStruct := new(XMLResponseAnaliticGetHandbook)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 
@@ -83,52 +83,52 @@ func (a *API) AnaliticGetHandbook(handbookID int) (XmlResponseAnaliticGetHandboo
 }
 
 // analitic.get
-func (a *API) AnaliticGetOptions(analiticID int) (XmlResponseAnaliticGetOptions, error) {
-	requestStruct := XmlRequestAnaliticGetOptions{
+func (a *API) AnaliticGetOptions(analiticID int) (XMLResponseAnaliticGetOptions, error) {
+	requestStruct := XMLRequestAnaliticGetOptions{
 		AnaliticID: analiticID,
 	}
 	requestStruct.Method = "analitic.getOptions"
-	responseStruct := new(XmlResponseAnaliticGetOptions)
+	responseStruct := new(XMLResponseAnaliticGetOptions)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return *responseStruct, err
 }
 
 // action.add
-func (a *API) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd, error) {
+func (a *API) ActionAdd(requestStruct XMLRequestActionAdd) (XMLResponseActionAdd, error) {
 	requestStruct.Method = "action.add"
 
 	// only task or contact allowed
 	if (requestStruct.TaskID > 0 || requestStruct.TaskGeneral > 0) && requestStruct.ContactGeneral > 0 {
-		return XmlResponseActionAdd{}, errors.New("Both task and contact defined")
+		return XMLResponseActionAdd{}, errors.New("Both task and contact defined")
 	}
 
-	responseStruct := new(XmlResponseActionAdd)
+	responseStruct := new(XMLResponseActionAdd)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return *responseStruct, err
 }
 
 // task.get
-func (a *API) TaskGet(taskID, taskGeneral int) (XmlResponseTaskGet, error) {
-	requestStruct := XmlRequestTaskGet{
+func (a *API) TaskGet(taskID, taskGeneral int) (XMLResponseTaskGet, error) {
+	requestStruct := XMLRequestTaskGet{
 		TaskID:      taskID,
 		TaskGeneral: taskGeneral,
 	}
 	requestStruct.Method = "task.get"
-	responseStruct := new(XmlResponseTaskGet)
+	responseStruct := new(XMLResponseTaskGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return *responseStruct, err
 }
 
 // user.get
-func (a *API) UserGet(userID int) (XmlResponseUserGet, error) {
-	requestStruct := XmlRequestUserGet{
+func (a *API) UserGet(userID int) (XMLResponseUserGet, error) {
+	requestStruct := XMLRequestUserGet{
 		UserID: userID,
 	}
 	requestStruct.Method = "user.get"
-	responseStruct := new(XmlResponseUserGet)
+	responseStruct := new(XMLResponseUserGet)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return *responseStruct, err

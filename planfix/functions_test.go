@@ -173,10 +173,10 @@ func TestAPI_AuthenticatedExpireFailedAfter(t *testing.T) {
 }
 
 // invalid xml
-func TestAPI_InvalidXml(t *testing.T) {
-	api := newAPI([]string{fixtureFromFile("error.invalidXml.xml")})
+func TestAPI_InvalidXML(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("error.invalidXML.xml")})
 	_, err := api.ActionGet(123)
-	expectError(t, err, "TestAPI_InvalidXml")
+	expectError(t, err, "TestAPI_InvalidXML")
 }
 
 // network error
@@ -196,7 +196,7 @@ func TestAPI_502Error(t *testing.T) {
 // action.get
 func TestAPI_ActionGet(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("action.get.xml")})
-	var action planfix.XmlResponseActionGet
+	var action planfix.XMLResponseActionGet
 	action, err := api.ActionGet(123)
 
 	expectSuccess(t, err, "TestAPI_ActionGet")
@@ -206,10 +206,10 @@ func TestAPI_ActionGet(t *testing.T) {
 // action.getList
 func TestAPI_ActionGetList(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("action.getList.xml")})
-	request := planfix.XmlRequestActionGetList{
+	request := planfix.XMLRequestActionGetList{
 		TaskGeneral: 525330,
 	}
-	var actionList planfix.XmlResponseActionGetList
+	var actionList planfix.XMLResponseActionGetList
 	actionList, err := api.ActionGetList(request)
 
 	expectSuccess(t, err, "TestAPI_ActionGetList")
@@ -219,7 +219,7 @@ func TestAPI_ActionGetList(t *testing.T) {
 // analitic.getList
 func TestAPI_AnaliticGetList(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("analitic.getList.xml")})
-	var analiticList planfix.XmlResponseAnaliticGetList
+	var analiticList planfix.XMLResponseAnaliticGetList
 	analiticList, err := api.AnaliticGetList(0)
 
 	expectSuccess(t, err, "TestAPI_AnaliticGetList")
@@ -229,7 +229,7 @@ func TestAPI_AnaliticGetList(t *testing.T) {
 // analitic.getOptiions
 func TestAPI_AnaliticGetOptions(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("analitic.getOptions.xml")})
-	var analitic planfix.XmlResponseAnaliticGetOptions
+	var analitic planfix.XMLResponseAnaliticGetOptions
 	analitic, err := api.AnaliticGetOptions(123)
 
 	expectSuccess(t, err, "TestAPI_AnaliticGetOptions")
@@ -240,7 +240,7 @@ func TestAPI_AnaliticGetOptions(t *testing.T) {
 // analitic.getHandbook
 func TestAPI_AnaliticGetHandbook(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("analitic.getHandbook.xml")})
-	var handbook planfix.XmlResponseAnaliticGetHandbook
+	var handbook planfix.XMLResponseAnaliticGetHandbook
 	handbook, err := api.AnaliticGetHandbook(123)
 
 	expectSuccess(t, err, "TestAPI_AnaliticGetHandbook")
@@ -251,11 +251,11 @@ func TestAPI_AnaliticGetHandbook(t *testing.T) {
 // action.add
 func TestAPI_ActionAdd(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("action.add.xml")})
-	request := planfix.XmlRequestActionAdd{
+	request := planfix.XMLRequestActionAdd{
 		TaskGeneral: 123,
 		Description: "asdf",
 	}
-	var actionAdded planfix.XmlResponseActionAdd
+	var actionAdded planfix.XMLResponseActionAdd
 	actionAdded, err := api.ActionAdd(request)
 
 	expectSuccess(t, err, "TestAPI_ActionAdd")
@@ -265,7 +265,7 @@ func TestAPI_ActionAdd(t *testing.T) {
 // action.add both task and contact defined
 func TestAPI_ActionAddBothTaskContact(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("action.add.xml")})
-	request := planfix.XmlRequestActionAdd{
+	request := planfix.XMLRequestActionAdd{
 		TaskGeneral:    123,
 		ContactGeneral: 123,
 		Description:    "asdf",
@@ -278,7 +278,7 @@ func TestAPI_ActionAddBothTaskContact(t *testing.T) {
 // task.get
 func TestAPI_TaskGet(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("task.get.xml")})
-	var task planfix.XmlResponseTaskGet
+	var task planfix.XMLResponseTaskGet
 	task, err := api.TaskGet(123, 0)
 
 	expectSuccess(t, err, "TestAPI_TaskGet")
@@ -288,7 +288,7 @@ func TestAPI_TaskGet(t *testing.T) {
 // user.get
 func TestAPI_UserGet(t *testing.T) {
 	api := newAPI([]string{fixtureFromFile("user.get.xml")})
-	var user planfix.XmlResponseUserGet
+	var user planfix.XMLResponseUserGet
 	user, err := api.UserGet(0)
 
 	expectSuccess(t, err, "TestAPI_UserGet")

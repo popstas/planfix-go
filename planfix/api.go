@@ -46,7 +46,7 @@ func (a *API) ensureAuthenticated() error {
 	return nil
 }
 
-func (a API) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, data []byte, err error) {
+func (a API) tryRequest(requestStruct XMLRequester) (status XMLResponseStatus, data []byte, err error) {
 	//xmlBytes, err := xml.MarshalIndent(requestStruct, "  ", "    ")
 	xmlBytes, _ := xml.Marshal(requestStruct)
 	xmlString := xml.Header + string(xmlBytes)
@@ -84,7 +84,7 @@ func (a API) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 	return status, data, err
 }
 
-func (a *API) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
+func (a *API) apiRequest(requestStruct XMLRequester, responseStruct interface{}) error {
 	requestStruct.SetAccount(a.Account)
 	if requestStruct.GetMethod() != "auth.login" {
 		if err := a.ensureAuthenticated(); err != nil {
@@ -94,7 +94,7 @@ func (a *API) apiRequest(requestStruct XmlRequester, responseStruct interface{})
 	}
 
 	var (
-		status XmlResponseStatus
+		status XMLResponseStatus
 		data   []byte
 		err    error
 	)
