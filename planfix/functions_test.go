@@ -79,50 +79,50 @@ func (s *MockedServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	resp.Write([]byte(answer))
 }
 
-func newApi(responses []string) planfix.Api {
+func newAPI(responses []string) planfix.API {
 	ms := NewMockedServer(responses)
 	api := planfix.New(ms.URL, "apiKey", "account", "user", "password")
 	api.Sid = "123"
 	return api
 }
 
-func TestApi_ErrorCode(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("error.xml")})
+func TestAPI_ErrorCode(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("error.xml")})
 	_, err := api.AuthLogin(api.User, api.Password)
-	expectError(t, err, "TestApi_ErrorCode")
+	expectError(t, err, "TestAPI_ErrorCode")
 }
 
-func TestApi_ErrorCodeUnknown(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("error.unknown.xml")})
+func TestAPI_ErrorCodeUnknown(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("error.unknown.xml")})
 	_, err := api.AuthLogin(api.User, api.Password)
 	if !strings.Contains(string(err.Error()), "Неизвестная ошибка") {
 		t.Error("Failed to output unknown error")
 	}
-	expectError(t, err, "TestApi_ErrorCodeUnknown")
+	expectError(t, err, "TestAPI_ErrorCodeUnknown")
 }
 
 // auth.login
-func TestApi_AuthLogin(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("auth.login.xml")})
+func TestAPI_AuthLogin(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("auth.login.xml")})
 	api.Sid = ""
 	answer, err := api.AuthLogin(api.User, api.Password)
 
-	expectSuccess(t, err, "TestApi_AuthLogin")
+	expectSuccess(t, err, "TestAPI_AuthLogin")
 	assert(t, answer, "sid_after_login")
 }
 
 // fail to authenticate
-func TestApi_EnsureAuthenticatedFailed(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("error.xml")})
+func TestAPI_EnsureAuthenticatedFailed(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("error.xml")})
 	api.Sid = ""
 	_, err := api.ActionGet(456)
 
-	expectError(t, err, "TestApi_EnsureAuthenticatedFailed")
+	expectError(t, err, "TestAPI_EnsureAuthenticatedFailed")
 }
 
 // authenticate before api request if not authenticated
-func TestApi_EnsureAuthenticated(t *testing.T) {
-	api := newApi([]string{
+func TestAPI_EnsureAuthenticated(t *testing.T) {
+	api := newAPI([]string{
 		fixtureFromFile("auth.login.xml"),
 		fixtureFromFile("action.get.xml"),
 		fixtureFromFile("action.get.xml"),
@@ -137,120 +137,120 @@ func TestApi_EnsureAuthenticated(t *testing.T) {
 }
 
 // reauthenticate if session expired
-func TestApi_AuthenticatedExpire(t *testing.T) {
-	api := newApi([]string{
+func TestAPI_AuthenticatedExpire(t *testing.T) {
+	api := newAPI([]string{
 		fixtureFromFile("error.sessionExpired.xml"),
 		fixtureFromFile("auth.login.xml"),
 		fixtureFromFile("action.get.xml"),
 	})
 	action, err := api.ActionGet(456)
 
-	expectSuccess(t, err, "TestApi_AuthenticatedExpire")
+	expectSuccess(t, err, "TestAPI_AuthenticatedExpire")
 	assert(t, action.Action.TaskID, 1128468)
 }
 
 // error response while reauthenticate
-func TestApi_AuthenticatedExpireFailed(t *testing.T) {
-	api := newApi([]string{
+func TestAPI_AuthenticatedExpireFailed(t *testing.T) {
+	api := newAPI([]string{
 		fixtureFromFile("error.sessionExpired.xml"),
 		fixtureFromFile("error.xml"),
 	})
 	_, err := api.ActionGet(456)
 
-	expectError(t, err, "TestApi_AuthenticatedExpireFailed")
+	expectError(t, err, "TestAPI_AuthenticatedExpireFailed")
 }
 
 // error response after reauthenticated session
-func TestApi_AuthenticatedExpireFailedAfter(t *testing.T) {
-	api := newApi([]string{
+func TestAPI_AuthenticatedExpireFailedAfter(t *testing.T) {
+	api := newAPI([]string{
 		fixtureFromFile("error.sessionExpired.xml"),
 		fixtureFromFile("auth.login.xml"),
 		fixtureFromFile("error.xml"),
 	})
 	_, err := api.ActionGet(456)
 
-	expectError(t, err, "TestApi_AuthenticatedExpireFailedAfter")
+	expectError(t, err, "TestAPI_AuthenticatedExpireFailedAfter")
 }
 
 // invalid xml
-func TestApi_InvalidXml(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("error.invalidXml.xml")})
+func TestAPI_InvalidXml(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("error.invalidXml.xml")})
 	_, err := api.ActionGet(123)
-	expectError(t, err, "TestApi_InvalidXml")
+	expectError(t, err, "TestAPI_InvalidXml")
 }
 
 // network error
-func TestApi_NetworkError(t *testing.T) {
-	api := newApi([]string{"panic"})
+func TestAPI_NetworkError(t *testing.T) {
+	api := newAPI([]string{"panic"})
 	_, err := api.ActionGet(123)
-	expectError(t, err, "TestApi_NetworkError")
+	expectError(t, err, "TestAPI_NetworkError")
 }
 
 // 502 error
-func TestApi_502Error(t *testing.T) {
-	api := newApi([]string{"502"})
+func TestAPI_502Error(t *testing.T) {
+	api := newAPI([]string{"502"})
 	_, err := api.ActionGet(123)
-	expectError(t, err, "TestApi_502Error")
+	expectError(t, err, "TestAPI_502Error")
 }
 
 // action.get
-func TestApi_ActionGet(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("action.get.xml")})
+func TestAPI_ActionGet(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("action.get.xml")})
 	var action planfix.XmlResponseActionGet
 	action, err := api.ActionGet(123)
 
-	expectSuccess(t, err, "TestApi_ActionGet")
+	expectSuccess(t, err, "TestAPI_ActionGet")
 	assert(t, action.Action.TaskID, 1128468)
 }
 
 // action.getList
-func TestApi_ActionGetList(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("action.getList.xml")})
+func TestAPI_ActionGetList(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("action.getList.xml")})
 	request := planfix.XmlRequestActionGetList{
 		TaskGeneral: 525330,
 	}
 	var actionList planfix.XmlResponseActionGetList
 	actionList, err := api.ActionGetList(request)
 
-	expectSuccess(t, err, "TestApi_ActionGetList")
+	expectSuccess(t, err, "TestAPI_ActionGetList")
 	assert(t, actionList.Actions.ActionsTotalCount, 31)
 }
 
 // analitic.getList
-func TestApi_AnaliticGetList(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("analitic.getList.xml")})
+func TestAPI_AnaliticGetList(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("analitic.getList.xml")})
 	var analiticList planfix.XmlResponseAnaliticGetList
 	analiticList, err := api.AnaliticGetList(0)
 
-	expectSuccess(t, err, "TestApi_AnaliticGetList")
+	expectSuccess(t, err, "TestAPI_AnaliticGetList")
 	assert(t, analiticList.Analitics.AnaliticsTotalCount, 2)
 }
 
 // analitic.getOptiions
-func TestApi_AnaliticGetOptions(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("analitic.getOptions.xml")})
+func TestAPI_AnaliticGetOptions(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("analitic.getOptions.xml")})
 	var analitic planfix.XmlResponseAnaliticGetOptions
 	analitic, err := api.AnaliticGetOptions(123)
 
-	expectSuccess(t, err, "TestApi_AnaliticGetOptions")
+	expectSuccess(t, err, "TestAPI_AnaliticGetOptions")
 	assert(t, analitic.Analitic.GroupID, 1)
 	assert(t, analitic.Analitic.Fields[0].HandbookID, 131)
 }
 
 // analitic.getHandbook
-func TestApi_AnaliticGetHandbook(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("analitic.getHandbook.xml")})
+func TestAPI_AnaliticGetHandbook(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("analitic.getHandbook.xml")})
 	var handbook planfix.XmlResponseAnaliticGetHandbook
 	handbook, err := api.AnaliticGetHandbook(123)
 
-	expectSuccess(t, err, "TestApi_AnaliticGetHandbook")
+	expectSuccess(t, err, "TestAPI_AnaliticGetHandbook")
 	assert(t, handbook.Records[4].Values[0].Value, "Поминутная работа программиста")
 	assert(t, handbook.Records[4].ValuesMap["Название"], "Поминутная работа программиста")
 }
 
 // action.add
-func TestApi_ActionAdd(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("action.add.xml")})
+func TestAPI_ActionAdd(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("action.add.xml")})
 	request := planfix.XmlRequestActionAdd{
 		TaskGeneral: 123,
 		Description: "asdf",
@@ -258,13 +258,13 @@ func TestApi_ActionAdd(t *testing.T) {
 	var actionAdded planfix.XmlResponseActionAdd
 	actionAdded, err := api.ActionAdd(request)
 
-	expectSuccess(t, err, "TestApi_ActionAdd")
+	expectSuccess(t, err, "TestAPI_ActionAdd")
 	assert(t, actionAdded.ActionID, 123)
 }
 
 // action.add both task and contact defined
-func TestApi_ActionAddBothTaskContact(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("action.add.xml")})
+func TestAPI_ActionAddBothTaskContact(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("action.add.xml")})
 	request := planfix.XmlRequestActionAdd{
 		TaskGeneral:    123,
 		ContactGeneral: 123,
@@ -272,25 +272,25 @@ func TestApi_ActionAddBothTaskContact(t *testing.T) {
 	}
 	_, err := api.ActionAdd(request)
 
-	expectError(t, err, "TestApi_ActionAddBothTaskContact")
+	expectError(t, err, "TestAPI_ActionAddBothTaskContact")
 }
 
 // task.get
-func TestApi_TaskGet(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("task.get.xml")})
+func TestAPI_TaskGet(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("task.get.xml")})
 	var task planfix.XmlResponseTaskGet
 	task, err := api.TaskGet(123, 0)
 
-	expectSuccess(t, err, "TestApi_TaskGet")
+	expectSuccess(t, err, "TestAPI_TaskGet")
 	assert(t, task.Task.ProjectID, 9830)
 }
 
 // user.get
-func TestApi_UserGet(t *testing.T) {
-	api := newApi([]string{fixtureFromFile("user.get.xml")})
+func TestAPI_UserGet(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("user.get.xml")})
 	var user planfix.XmlResponseUserGet
 	user, err := api.UserGet(0)
 
-	expectSuccess(t, err, "TestApi_UserGet")
+	expectSuccess(t, err, "TestAPI_UserGet")
 	assert(t, user.User.Login, "popstas")
 }

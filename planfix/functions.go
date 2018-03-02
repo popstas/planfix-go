@@ -5,7 +5,7 @@ import (
 )
 
 // auth.login
-func (a Api) AuthLogin(user, password string) (string, error) {
+func (a API) AuthLogin(user, password string) (string, error) {
 	requestStruct := XmlRequestAuthLogin{
 		Method:   "auth.login",
 		Account:  a.Account,
@@ -19,7 +19,7 @@ func (a Api) AuthLogin(user, password string) (string, error) {
 }
 
 // action.get
-func (a *Api) ActionGet(actionID int) (XmlResponseActionGet, error) {
+func (a *API) ActionGet(actionID int) (XmlResponseActionGet, error) {
 	requestStruct := XmlRequestActionGet{
 		ActionID: actionID,
 	}
@@ -31,7 +31,7 @@ func (a *Api) ActionGet(actionID int) (XmlResponseActionGet, error) {
 }
 
 // action.getList
-func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseActionGetList, error) {
+func (a *API) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseActionGetList, error) {
 	requestStruct.Method = "action.getList"
 
 	// defaults
@@ -49,7 +49,7 @@ func (a *Api) ActionGetList(requestStruct XmlRequestActionGetList) (XmlResponseA
 }
 
 // analitic.getList
-func (a *Api) AnaliticGetList(groupID int) (XmlResponseAnaliticGetList, error) {
+func (a *API) AnaliticGetList(groupID int) (XmlResponseAnaliticGetList, error) {
 	requestStruct := XmlRequestAnaliticGetList{
 		AnaliticGroupID: groupID,
 	}
@@ -61,7 +61,7 @@ func (a *Api) AnaliticGetList(groupID int) (XmlResponseAnaliticGetList, error) {
 }
 
 // analitic.getHandbook
-func (a *Api) AnaliticGetHandbook(handbookID int) (XmlResponseAnaliticGetHandbook, error) {
+func (a *API) AnaliticGetHandbook(handbookID int) (XmlResponseAnaliticGetHandbook, error) {
 	requestStruct := XmlRequestAnaliticGetHandbook{
 		HandbookID: handbookID,
 	}
@@ -83,7 +83,7 @@ func (a *Api) AnaliticGetHandbook(handbookID int) (XmlResponseAnaliticGetHandboo
 }
 
 // analitic.get
-func (a *Api) AnaliticGetOptions(analiticID int) (XmlResponseAnaliticGetOptions, error) {
+func (a *API) AnaliticGetOptions(analiticID int) (XmlResponseAnaliticGetOptions, error) {
 	requestStruct := XmlRequestAnaliticGetOptions{
 		AnaliticID: analiticID,
 	}
@@ -95,7 +95,7 @@ func (a *Api) AnaliticGetOptions(analiticID int) (XmlResponseAnaliticGetOptions,
 }
 
 // action.add
-func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd, error) {
+func (a *API) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd, error) {
 	requestStruct.Method = "action.add"
 
 	// only task or contact allowed
@@ -110,7 +110,7 @@ func (a *Api) ActionAdd(requestStruct XmlRequestActionAdd) (XmlResponseActionAdd
 }
 
 // task.get
-func (a *Api) TaskGet(taskID, taskGeneral int) (XmlResponseTaskGet, error) {
+func (a *API) TaskGet(taskID, taskGeneral int) (XmlResponseTaskGet, error) {
 	requestStruct := XmlRequestTaskGet{
 		TaskID:      taskID,
 		TaskGeneral: taskGeneral,
@@ -123,7 +123,7 @@ func (a *Api) TaskGet(taskID, taskGeneral int) (XmlResponseTaskGet, error) {
 }
 
 // user.get
-func (a *Api) UserGet(userID int) (XmlResponseUserGet, error) {
+func (a *API) UserGet(userID int) (XmlResponseUserGet, error) {
 	requestStruct := XmlRequestUserGet{
 		UserID: userID,
 	}

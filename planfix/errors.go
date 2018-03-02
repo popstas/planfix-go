@@ -1,6 +1,6 @@
 package planfix
 
-func (a Api) getErrorByCode(code string) string {
+func (a API) getErrorByCode(code string) string {
 	// https://planfix.ru/docs/Коды_ошибок
 	errorCodes := map[string]string{
 		// Без классификации

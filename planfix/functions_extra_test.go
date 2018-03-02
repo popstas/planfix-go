@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestApi_GetAnaliticByName(t *testing.T) {
-	api := newApi([]string{
+func TestAPI_GetAnaliticByName(t *testing.T) {
+	api := newAPI([]string{
 		fixtureFromFile("analitic.getList.xml"),
 		fixtureFromFile("analitic.getList.xml"),
 		fixtureFromFile("error.xml"),
@@ -15,20 +15,20 @@ func TestApi_GetAnaliticByName(t *testing.T) {
 
 	// existent
 	analitic, err := api.GetAnaliticByName("Выработка")
-	expectSuccess(t, err, "TestApi_GetAnaliticByName Выработка")
+	expectSuccess(t, err, "TestAPI_GetAnaliticByName Выработка")
 	assert(t, analitic.Name, "Выработка")
 
 	// non existent
 	analitic, err = api.GetAnaliticByName("ldkfgjld")
-	expectError(t, err, "TestApi_GetAnaliticByName non existent")
+	expectError(t, err, "TestAPI_GetAnaliticByName non existent")
 
 	// error
 	analitic, err = api.GetAnaliticByName("ldkfgjld")
-	expectError(t, err, "TestApi_GetAnaliticByName error")
+	expectError(t, err, "TestAPI_GetAnaliticByName error")
 }
 
-func TestApi_GetHandbookRecordByName(t *testing.T) {
-	api := newApi([]string{
+func TestAPI_GetHandbookRecordByName(t *testing.T) {
+	api := newAPI([]string{
 		fixtureFromFile("analitic.getHandbook.xml"),
 		fixtureFromFile("analitic.getHandbook.xml"),
 		fixtureFromFile("error.xml"),
@@ -37,14 +37,14 @@ func TestApi_GetHandbookRecordByName(t *testing.T) {
 
 	// existent
 	record, err := api.GetHandbookRecordByName(123, "Поминутная работа программиста")
-	expectSuccess(t, err, "TestApi_GetHandbookRecordByName Поминутная работа программиста")
+	expectSuccess(t, err, "TestAPI_GetHandbookRecordByName Поминутная работа программиста")
 	assert(t, record.ValuesMap["Название"], "Поминутная работа программиста")
 
 	// non existent
 	record, err = api.GetHandbookRecordByName(123, "ldkfgjld")
-	expectError(t, err, "TestApi_GetHandbookRecordByName non existent")
+	expectError(t, err, "TestAPI_GetHandbookRecordByName non existent")
 
 	// error
 	record, err = api.GetHandbookRecordByName(123, "ldkfgjld")
-	expectError(t, err, "TestApi_GetHandbookRecordByName error")
+	expectError(t, err, "TestAPI_GetHandbookRecordByName error")
 }

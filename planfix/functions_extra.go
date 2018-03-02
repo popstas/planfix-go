@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (a *Api) GetAnaliticByName(searchName string) (XmlResponseAnalitic, error) {
+func (a *API) GetAnaliticByName(searchName string) (XmlResponseAnalitic, error) {
 	var analiticList XmlResponseAnaliticGetList
 	analiticList, err := a.AnaliticGetList(0)
 	if err != nil {
@@ -19,7 +19,7 @@ func (a *Api) GetAnaliticByName(searchName string) (XmlResponseAnalitic, error) 
 	return XmlResponseAnalitic{}, errors.New(fmt.Sprintf("Analitic %s not found", searchName))
 }
 
-func (a *Api) GetHandbookRecordByName(handbookID int, searchName string) (XmlResponseAnaliticHandbookRecord, error) {
+func (a *API) GetHandbookRecordByName(handbookID int, searchName string) (XmlResponseAnaliticHandbookRecord, error) {
 	var handbook XmlResponseAnaliticGetHandbook
 	handbook, err := a.AnaliticGetHandbook(handbookID)
 	if err != nil {

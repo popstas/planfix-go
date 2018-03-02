@@ -12,9 +12,9 @@ import (
 	"strings"
 )
 
-type Api struct {
+type API struct {
 	Url       string
-	ApiKey    string
+	APIKey    string
 	Account   string
 	Sid       string
 	User      string
@@ -23,10 +23,10 @@ type Api struct {
 	Logger    *log.Logger
 }
 
-func New(url, apiKey, account, user, password string) Api {
-	return Api{
+func New(url, apiKey, account, user, password string) API {
+	return API{
 		Url:       url,
-		ApiKey:    apiKey,
+		APIKey:    apiKey,
 		Account:   account,
 		User:      user,
 		Password:  password,
@@ -35,7 +35,7 @@ func New(url, apiKey, account, user, password string) Api {
 	}
 }
 
-func (a *Api) ensureAuthenticated() error {
+func (a *API) ensureAuthenticated() error {
 	if a.Sid == "" {
 		sid, err := a.AuthLogin(a.User, a.Password)
 		if err != nil {
@@ -47,7 +47,7 @@ func (a *Api) ensureAuthenticated() error {
 	return nil
 }
 
-func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, data []byte, err error) {
+func (a API) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, data []byte, err error) {
 	//xmlBytes, err := xml.MarshalIndent(requestStruct, "  ", "    ")
 	xmlBytes, _ := xml.Marshal(requestStruct)
 	xmlString := xml.Header + string(xmlBytes)
@@ -63,7 +63,7 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 	req, _ := http.NewRequest("POST", a.Url, strings.NewReader(xmlString))
 	req.Header.Add("Content-Type", "application/xml; charset=utf-8")
 	req.Header.Set("User-Agent", a.UserAgent)
-	req.SetBasicAuth(a.ApiKey, "")
+	req.SetBasicAuth(a.APIKey, "")
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
@@ -85,7 +85,7 @@ func (a Api) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 	return status, data, err
 }
 
-func (a *Api) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
+func (a *API) apiRequest(requestStruct XmlRequester, responseStruct interface{}) error {
 	requestStruct.SetAccount(a.Account)
 	if requestStruct.GetMethod() != "auth.login" {
 		if err := a.ensureAuthenticated(); err != nil {
