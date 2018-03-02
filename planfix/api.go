@@ -13,7 +13,7 @@ import (
 )
 
 type API struct {
-	Url       string
+	URL       string
 	APIKey    string
 	Account   string
 	Sid       string
@@ -25,7 +25,7 @@ type API struct {
 
 func New(url, apiKey, account, user, password string) API {
 	return API{
-		Url:       url,
+		URL:       url,
 		APIKey:    apiKey,
 		Account:   account,
 		User:      user,
@@ -60,7 +60,7 @@ func (a API) tryRequest(requestStruct XmlRequester) (status XmlResponseStatus, d
 	)
 
 	httpClient := http.Client{}
-	req, _ := http.NewRequest("POST", a.Url, strings.NewReader(xmlString))
+	req, _ := http.NewRequest("POST", a.URL, strings.NewReader(xmlString))
 	req.Header.Add("Content-Type", "application/xml; charset=utf-8")
 	req.Header.Set("User-Agent", a.UserAgent)
 	req.SetBasicAuth(a.APIKey, "")
