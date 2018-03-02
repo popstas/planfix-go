@@ -3,7 +3,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/popstas/planfix-go/badge.svg?branch=master)](https://coveralls.io/github/popstas/planfix-go?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/popstas/planfix-go/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/popstas/planfix-go/?branch=master)
  
-Клиент API для Планфикса на Go
+Клиент API для Планфикса на Go.
+
+Документация на godoc - https://godoc.org/github.com/popstas/planfix-go/planfix
 
 Все запросы и ответы типизированы, по возможности сохранено именование из [документации](https://planfix.ru/docs/Список_функций)
 

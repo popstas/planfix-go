@@ -4,12 +4,14 @@ import (
 	"encoding/xml"
 )
 
-// in all requests except auth.login
+// XMLRequester - любая структура запроса
 type XMLRequester interface {
 	SetSid(sid string)
 	SetAccount(account string)
 	GetMethod() string
 }
+
+// XMLRequestAuth - запрос авторизации
 type XMLRequestAuth struct {
 	XMLName xml.Name `xml:"request"`
 	Method  string   `xml:"method,attr"`
@@ -17,17 +19,22 @@ type XMLRequestAuth struct {
 	Sid     string   `xml:"sid"`
 }
 
+// SetSid задает sid
 func (a *XMLRequestAuth) SetSid(sid string) {
 	a.Sid = sid
 }
+
+// SetAccount задает account
 func (a *XMLRequestAuth) SetAccount(account string) {
 	a.Account = account
 }
+
+// GetMethod возвращает метод API (название)
 func (a *XMLRequestAuth) GetMethod() string {
 	return a.Method
 }
 
-// in all responses
+// XMLResponseStatus - любой ответ, подразумевает статус ответа и код ошибки в случае ошибки
 type XMLResponseStatus struct {
 	XMLName xml.Name `xml:"response"`
 	Status  string   `xml:"status,attr"`
@@ -35,22 +42,26 @@ type XMLResponseStatus struct {
 	Message string   `xml:"message"`
 }
 
+// XMLResponseFile - файл в ответе analitic.get
 type XMLResponseFile struct {
 	ID   int    `xml:"id"`
 	Name string `xml:"name"`
 }
 
+// XMLResponseActionUser - юзер в ответе analitic.get
 type XMLResponseActionUser struct {
 	ID   int    `xml:"id,omitempty"`
 	Name string `xml:"name,omitempty"`
 }
 
+// XMLResponseActionAnalitic - аналитика в ответе analitic.get
 type XMLResponseActionAnalitic struct {
 	ID   int    `xml:"id"`
 	Key  int    `xml:"key"`
 	Name string `xml:"name"`
 }
 
+// XMLResponseAnaliticOptions - аналитика в ответе analitic.getOptions
 type XMLResponseAnaliticOptions struct {
 	ID      int                               `xml:"id"`
 	Name    string                            `xml:"name"`
@@ -58,6 +69,7 @@ type XMLResponseAnaliticOptions struct {
 	Fields  []XMLResponseAnaliticOptionsField `xml:"fields>field"`
 }
 
+// XMLResponseAnaliticOptionsField - поле аналитики в ответе analitic.getOptions
 type XMLResponseAnaliticOptionsField struct {
 	ID         int      `xml:"id"`
 	Num        int      `xml:"num"`
@@ -67,6 +79,7 @@ type XMLResponseAnaliticOptionsField struct {
 	HandbookID int      `xml:"handbook>id"`
 }
 
+// XMLResponseAnaliticHandbookRecord - запись справочника в ответе analitic.getHandbook
 type XMLResponseAnaliticHandbookRecord struct {
 	Key       int                                       `xml:"key"`
 	ParentKey int                                       `xml:"parentKey"`
@@ -75,12 +88,14 @@ type XMLResponseAnaliticHandbookRecord struct {
 	ValuesMap map[string]string
 }
 
+// XMLResponseAnaliticHandbookRecordValues - значения полей в записи справочника в ответе analitic.getHandbook
 type XMLResponseAnaliticHandbookRecordValues struct {
 	Name        string `xml:"name,attr"`
 	Value       string `xml:"value,attr"`
 	IsDisplayed int    `xml:"isDisplayed,attr"`
 }
 
+// XMLResponseAction - действие в ответе action.getList
 type XMLResponseAction struct {
 	ID                           int                         `xml:"id"`
 	Description                  string                      `xml:"description"`
@@ -105,6 +120,7 @@ type XMLResponseAction struct {
 	Analitics                    []XMLResponseActionAnalitic `xml:"analitics>analitic"`
 }
 
+// XMLResponseTask - задача в ответе task.get
 // TODO: добавить все поля из https://planfix.ru/docs/ПланФикс_API_task.get
 type XMLResponseTask struct {
 	ID           int    `xml:"id"`
@@ -115,6 +131,7 @@ type XMLResponseTask struct {
 	ProjectTitle string `xml:"project>title"`
 }
 
+// XMLResponseAnalitic - аналитика в ответе analitic.getList
 type XMLResponseAnalitic struct {
 	ID        int    `xml:"id"`
 	Name      string `xml:"name"`
@@ -122,16 +139,19 @@ type XMLResponseAnalitic struct {
 	GroupName string `xml:"group>name"`
 }
 
-type XMLRequestAnalitic struct {
+// XMLRequestActionAnalitic - аналитика в запросе на добавление действия analitic.add
+type XMLRequestActionAnalitic struct {
 	ID       int                       `xml:"id"`
 	ItemData []XMLRequestAnaliticField `xml:"analiticData>itemData"`
 }
 
+// XMLRequestAnaliticField - поле аналитики в запросе на добавление действия analitic.add
 type XMLRequestAnaliticField struct {
 	FieldID int         `xml:"fieldId"`
 	Value   interface{} `xml:"value"`
 }
 
+// XMLResponseUser - юзер в ответе user.get
 // TODO: добавить все поля из https://planfix.ru/docs/ПланФикс_API_user.get
 type XMLResponseUser struct {
 	ID       int    `xml:"id"`
@@ -141,7 +161,7 @@ type XMLResponseUser struct {
 	Email    string `xml:"email"`
 }
 
-// auth.login
+// XMLRequestAuthLogin - запрос auth.login
 type XMLRequestAuthLogin struct {
 	XMLName xml.Name `xml:"request"`
 	Method  string   `xml:"method,attr"`
@@ -151,34 +171,39 @@ type XMLRequestAuthLogin struct {
 	Password string `xml:"password"`
 }
 
+// SetSid - заглушка, чтобы реализовать интерфейс
 func (a *XMLRequestAuthLogin) SetSid(sid string) {}
+
+// SetAccount задает account
 func (a *XMLRequestAuthLogin) SetAccount(account string) {
 	a.Account = account
 }
+
+// GetMethod возвращает метод API (название)
 func (a *XMLRequestAuthLogin) GetMethod() string {
 	return a.Method
 }
 
-// auth.login response
+// XMLResponseAuth - ответ auth.login
 type XMLResponseAuth struct {
 	XMLName xml.Name `xml:"response"`
 	Sid     string   `xml:"sid"`
 }
 
-// action.get
+// XMLRequestActionGet - запрос action.get
 type XMLRequestActionGet struct {
 	XMLRequestAuth
 	XMLName  xml.Name `xml:"request"`
 	ActionID int      `xml:"action>id"`
 }
 
-// action.get response
+// XMLResponseActionGet - ответ action.get
 type XMLResponseActionGet struct {
 	XMLName xml.Name          `xml:"response"`
 	Action  XMLResponseAction `xml:"action"`
 }
 
-// action.getList
+// XMLRequestActionGetList - запрос action.getList
 type XMLRequestActionGetList struct {
 	XMLRequestAuth
 	XMLName xml.Name `xml:"request"`
@@ -191,7 +216,7 @@ type XMLRequestActionGetList struct {
 	Sort           string `xml:"sort"`
 }
 
-// action.getList response
+// XMLResponseActionGetList - ответ action.getList
 type XMLResponseActionGetList struct {
 	XMLName xml.Name `xml:"response"`
 	Actions struct {
@@ -201,30 +226,30 @@ type XMLResponseActionGetList struct {
 	} `xml:"actions"`
 }
 
-// action.add
+// XMLRequestActionAdd - запрос action.add
 type XMLRequestActionAdd struct {
 	XMLRequestAuth
 	XMLName xml.Name `xml:"request"`
 
-	Description    string               `xml:"action>description"`
-	TaskID         int                  `xml:"action>task>id,omitempty"`
-	TaskGeneral    int                  `xml:"action>task>general,omitempty"`
-	ContactGeneral int                  `xml:"action>contact>general,omitempty"`
-	TaskNewStatus  int                  `xml:"action>taskNewStatus,omitempty"`
-	NotifiedList   []XMLResponseUser    `xml:"action>notifiedList>user,omitempty"`
-	IsHidden       int                  `xml:"action>isHidden"`
-	Owner          XMLResponseUser      `xml:"action>owner,omitempty"`
-	DateTime       string               `xml:"action>dateTime,omitempty"`
-	Analitics      []XMLRequestAnalitic `xml:"action>analitics>analitic,omitempty"`
+	Description    string                     `xml:"action>description"`
+	TaskID         int                        `xml:"action>task>id,omitempty"`
+	TaskGeneral    int                        `xml:"action>task>general,omitempty"`
+	ContactGeneral int                        `xml:"action>contact>general,omitempty"`
+	TaskNewStatus  int                        `xml:"action>taskNewStatus,omitempty"`
+	NotifiedList   []XMLResponseUser          `xml:"action>notifiedList>user,omitempty"`
+	IsHidden       int                        `xml:"action>isHidden"`
+	Owner          XMLResponseUser            `xml:"action>owner,omitempty"`
+	DateTime       string                     `xml:"action>dateTime,omitempty"`
+	Analitics      []XMLRequestActionAnalitic `xml:"action>analitics>analitic,omitempty"`
 }
 
-// action.add response
+// XMLResponseActionAdd - ответ action.add
 type XMLResponseActionAdd struct {
 	XMLName  xml.Name `xml:"response"`
 	ActionID int      `xml:"action>id"`
 }
 
-// analitic.getList
+// XMLRequestAnaliticGetList - запрос analitic.getList
 type XMLRequestAnaliticGetList struct {
 	XMLRequestAuth
 	XMLName xml.Name `xml:"request"`
@@ -232,7 +257,7 @@ type XMLRequestAnaliticGetList struct {
 	AnaliticGroupID int `xml:"analiticGroupId,omitempty"`
 }
 
-// analitic.getList response
+// XMLResponseAnaliticGetList - ответ analitic.getList
 type XMLResponseAnaliticGetList struct {
 	XMLName   xml.Name `xml:"response"`
 	Analitics struct {
@@ -242,7 +267,7 @@ type XMLResponseAnaliticGetList struct {
 	} `xml:"analitics"`
 }
 
-// analitic.getOptions
+// XMLRequestAnaliticGetOptions - запрос analitic.getOptions
 type XMLRequestAnaliticGetOptions struct {
 	XMLRequestAuth
 	XMLName xml.Name `xml:"request"`
@@ -250,13 +275,13 @@ type XMLRequestAnaliticGetOptions struct {
 	AnaliticID int `xml:"analitic>id"`
 }
 
-// analitic.getOptions response
+// XMLResponseAnaliticGetOptions - ответ analitic.getOptions
 type XMLResponseAnaliticGetOptions struct {
 	XMLName  xml.Name                   `xml:"response"`
 	Analitic XMLResponseAnaliticOptions `xml:"analitic"`
 }
 
-// analitic.getHandbook
+// XMLRequestAnaliticGetHandbook - запрос analitic.getHandbook
 type XMLRequestAnaliticGetHandbook struct {
 	XMLRequestAuth
 	XMLName xml.Name `xml:"request"`
@@ -264,13 +289,13 @@ type XMLRequestAnaliticGetHandbook struct {
 	HandbookID int `xml:"handbook>id"`
 }
 
-// analitic.getHandbook response
+// XMLResponseAnaliticGetHandbook - ответ analitic.getHandbook
 type XMLResponseAnaliticGetHandbook struct {
 	XMLName xml.Name                            `xml:"response"`
 	Records []XMLResponseAnaliticHandbookRecord `xml:"records>record"`
 }
 
-// task.get
+// XMLRequestTaskGet - запрос task.get
 type XMLRequestTaskGet struct {
 	XMLRequestAuth
 	XMLName xml.Name `xml:"request"`
@@ -279,13 +304,13 @@ type XMLRequestTaskGet struct {
 	TaskGeneral int `xml:"task>general,omitempty"`
 }
 
-// task.get response
+// XMLResponseTaskGet - ответ task.get response
 type XMLResponseTaskGet struct {
 	XMLName xml.Name        `xml:"response"`
 	Task    XMLResponseTask `xml:"task"`
 }
 
-// user.get
+// XMLRequestUserGet - запрос user.get
 type XMLRequestUserGet struct {
 	XMLRequestAuth
 	XMLName xml.Name `xml:"request"`
@@ -293,7 +318,7 @@ type XMLRequestUserGet struct {
 	UserID int `xml:"user>id,omitempty"`
 }
 
-// user.get response
+// XMLResponseUserGet - ответ user.get
 type XMLResponseUserGet struct {
 	XMLName xml.Name        `xml:"response"`
 	User    XMLResponseUser `xml:"user"`

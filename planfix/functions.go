@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-// auth.login
+// AuthLogin = auth.login
 func (a API) AuthLogin(user, password string) (string, error) {
 	requestStruct := XMLRequestAuthLogin{
 		Method:   "auth.login",
@@ -18,7 +18,7 @@ func (a API) AuthLogin(user, password string) (string, error) {
 	return responseStruct.Sid, err
 }
 
-// action.get
+// ActionGet = action.get
 func (a *API) ActionGet(actionID int) (XMLResponseActionGet, error) {
 	requestStruct := XMLRequestActionGet{
 		ActionID: actionID,
@@ -30,7 +30,7 @@ func (a *API) ActionGet(actionID int) (XMLResponseActionGet, error) {
 	return *responseStruct, err
 }
 
-// action.getList
+// ActionGetList = action.getList
 func (a *API) ActionGetList(requestStruct XMLRequestActionGetList) (XMLResponseActionGetList, error) {
 	requestStruct.Method = "action.getList"
 
@@ -48,7 +48,7 @@ func (a *API) ActionGetList(requestStruct XMLRequestActionGetList) (XMLResponseA
 	return *responseStruct, err
 }
 
-// analitic.getList
+// AnaliticGetList = analitic.getList
 func (a *API) AnaliticGetList(groupID int) (XMLResponseAnaliticGetList, error) {
 	requestStruct := XMLRequestAnaliticGetList{
 		AnaliticGroupID: groupID,
@@ -60,7 +60,7 @@ func (a *API) AnaliticGetList(groupID int) (XMLResponseAnaliticGetList, error) {
 	return *responseStruct, err
 }
 
-// analitic.getHandbook
+// AnaliticGetHandbook = analitic.getHandbook
 func (a *API) AnaliticGetHandbook(handbookID int) (XMLResponseAnaliticGetHandbook, error) {
 	requestStruct := XMLRequestAnaliticGetHandbook{
 		HandbookID: handbookID,
@@ -82,7 +82,7 @@ func (a *API) AnaliticGetHandbook(handbookID int) (XMLResponseAnaliticGetHandboo
 	return *responseStruct, err
 }
 
-// analitic.get
+// AnaliticGetOptions = analitic.get
 func (a *API) AnaliticGetOptions(analiticID int) (XMLResponseAnaliticGetOptions, error) {
 	requestStruct := XMLRequestAnaliticGetOptions{
 		AnaliticID: analiticID,
@@ -94,7 +94,7 @@ func (a *API) AnaliticGetOptions(analiticID int) (XMLResponseAnaliticGetOptions,
 	return *responseStruct, err
 }
 
-// action.add
+// ActionAdd = action.add
 func (a *API) ActionAdd(requestStruct XMLRequestActionAdd) (XMLResponseActionAdd, error) {
 	requestStruct.Method = "action.add"
 
@@ -109,7 +109,7 @@ func (a *API) ActionAdd(requestStruct XMLRequestActionAdd) (XMLResponseActionAdd
 	return *responseStruct, err
 }
 
-// task.get
+// TaskGet = task.get
 func (a *API) TaskGet(taskID, taskGeneral int) (XMLResponseTaskGet, error) {
 	requestStruct := XMLRequestTaskGet{
 		TaskID:      taskID,
@@ -122,7 +122,7 @@ func (a *API) TaskGet(taskID, taskGeneral int) (XMLResponseTaskGet, error) {
 	return *responseStruct, err
 }
 
-// user.get
+// UserGet = user.get
 func (a *API) UserGet(userID int) (XMLResponseUserGet, error) {
 	requestStruct := XMLRequestUserGet{
 		UserID: userID,

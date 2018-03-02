@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// GetAnaliticByName возвращает аналитику по названию
 func (a *API) GetAnaliticByName(searchName string) (XMLResponseAnalitic, error) {
 	var analiticList XMLResponseAnaliticGetList
 	analiticList, err := a.AnaliticGetList(0)
@@ -18,6 +19,7 @@ func (a *API) GetAnaliticByName(searchName string) (XMLResponseAnalitic, error) 
 	return XMLResponseAnalitic{}, fmt.Errorf("Analitic %s not found", searchName)
 }
 
+// GetHandbookRecordByName возвращает запись справочника ID справочника и названию
 func (a *API) GetHandbookRecordByName(handbookID int, searchName string) (XMLResponseAnaliticHandbookRecord, error) {
 	var handbook XMLResponseAnaliticGetHandbook
 	handbook, err := a.AnaliticGetHandbook(handbookID)

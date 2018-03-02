@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// API - реализация Планфикс API
 type API struct {
 	URL       string
 	APIKey    string
@@ -22,6 +23,7 @@ type API struct {
 	Logger    *log.Logger
 }
 
+// New возвращает экземпляр planfix.API
 func New(url, apiKey, account, user, password string) API {
 	return API{
 		URL:       url,
