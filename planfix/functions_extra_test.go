@@ -48,3 +48,25 @@ func TestAPI_GetHandbookRecordByName(t *testing.T) {
 	record, err = api.GetHandbookRecordByName(123, "ldkfgjld")
 	expectError(t, err, "TestAPI_GetHandbookRecordByName error")
 }
+
+func TestAPI_GetActiveUserByLogin(t *testing.T) {
+	api := newAPI([]string{
+		fixtureFromFile("user.getList.xml"),
+		fixtureFromFile("user.getList.xml"),
+		fixtureFromFile("error.xml"),
+	})
+	var user planfix.XMLResponseUser
+
+	// existent
+	user, err := api.GetActiveUserByLogin("popstas")
+	expectSuccess(t, err, "TestAPI_GetActiveUserByLogin popstas")
+	assert(t, user.Email, "popstas@company.ru")
+
+	// non existent
+	user, err = api.GetActiveUserByLogin("ldkfgjld")
+	expectError(t, err, "TestAPI_GetActiveUserByLogin non existent")
+
+	// error
+	user, err = api.GetActiveUserByLogin("ldkfgjld")
+	expectError(t, err, "TestAPI_GetActiveUserByLogin error")
+}

@@ -32,6 +32,7 @@
 ## Дополнительные функции
 - GetAnaliticByName
 - GetHandbookRecordByName
+- GetActiveUserByLogin
 
 ---
 

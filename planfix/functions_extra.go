@@ -33,3 +33,17 @@ func (a *API) GetHandbookRecordByName(handbookID int, searchName string) (XMLRes
 	}
 	return XMLResponseAnaliticHandbookRecord{}, fmt.Errorf("Record %s not found", searchName)
 }
+
+// GetHandbookRecordByName возвращает юзера по логину
+func (a *API) GetActiveUserByLogin(login string) (XMLResponseUser, error) {
+	users, err := a.UserGetList(XMLRequestUserGetList{Status: "ACTIVE"})
+	if err != nil {
+		return XMLResponseUser{}, err
+	}
+	for _, user := range users.Users.Users {
+		if user.Login == login {
+			return user, nil
+		}
+	}
+	return XMLResponseUser{}, fmt.Errorf("User %s not found", login)
+}
