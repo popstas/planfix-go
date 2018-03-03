@@ -56,7 +56,9 @@ func NewMockedServer(responses []string) *MockedServer {
 
 func (s *MockedServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	lastRequest, err := ioutil.ReadAll(req.Body)
-	//body := string(lastRequest)
+	if err != nil {
+		panic(err)
+	}
 
 	rs := requestStruct{}
 	err = xml.Unmarshal(lastRequest, &rs)
@@ -293,4 +295,21 @@ func TestAPI_UserGet(t *testing.T) {
 
 	expectSuccess(t, err, "TestAPI_UserGet")
 	assert(t, user.User.Login, "popstas")
+}
+
+// user.getList
+func TestAPI_UserGetList(t *testing.T) {
+	api := newAPI([]string{fixtureFromFile("user.getList.xml")})
+	var userList planfix.XMLResponseUserGetList
+	var err error
+
+	userList, err = api.UserGetList(planfix.XMLRequestUserGetList{})
+	expectSuccess(t, err, "TestAPI_UserGetList")
+	assert(t, userList.Users.UsersTotalCount, 2)
+
+	userList, err = api.UserGetList(planfix.XMLRequestUserGetList{Status: "sdl;kfj"})
+	expectError(t, err, "TestAPI_UserGetList_invalid_status")
+
+	userList, err = api.UserGetList(planfix.XMLRequestUserGetList{SortType: "sdl;kfj"})
+	expectError(t, err, "TestAPI_UserGetList_invalid_sort_type")
 }

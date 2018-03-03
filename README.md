@@ -27,9 +27,11 @@
 - analitic.getOptions
 - task.get
 - user.get
+- user.getList
 
 ## Дополнительные функции
 - GetAnaliticByName
+- GetHandbookRecordByName
 
 ---
 

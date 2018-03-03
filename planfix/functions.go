@@ -1,7 +1,8 @@
 package planfix
 
 import (
-	"errors"
+	"fmt"
+	"strings"
 )
 
 // AuthLogin = auth.login
@@ -100,7 +101,7 @@ func (a *API) ActionAdd(requestStruct XMLRequestActionAdd) (XMLResponseActionAdd
 
 	// only task or contact allowed
 	if (requestStruct.TaskID > 0 || requestStruct.TaskGeneral > 0) && requestStruct.ContactGeneral > 0 {
-		return XMLResponseActionAdd{}, errors.New("Both task and contact defined")
+		return XMLResponseActionAdd{}, fmt.Errorf("Both task and contact defined")
 	}
 
 	responseStruct := new(XMLResponseActionAdd)
@@ -129,6 +130,48 @@ func (a *API) UserGet(userID int) (XMLResponseUserGet, error) {
 	}
 	requestStruct.Method = "user.get"
 	responseStruct := new(XMLResponseUserGet)
+
+	err := a.apiRequest(&requestStruct, responseStruct)
+	return *responseStruct, err
+}
+
+// UserGetList = user.getList
+func (a *API) UserGetList(requestStruct XMLRequestUserGetList) (XMLResponseUserGetList, error) {
+	requestStruct.Method = "user.getList"
+
+	sortTypes := []string{
+		"NAME_ASC",      // по имени (алфавит)
+		"NAME_DESC",     // по имени (обратный порядок)
+		"GROUP_ASC",     // по имени группы (алфавит)
+		"GROUP_DESC",    // по имени группы (обратный порядок)
+		"ISACTIVE_ASC",  // неактивные, потом активные
+		"ISACTIVE_DESC", // активные, потом неактивные
+		"PROJECTS_ASC",  // по проекту (алфавит)
+		"PROJECTS_DESC", // по проекту (обратный порядок)
+		"ROLE_ASC",      // роль (возрастание)
+		"ROLE_DESC",     // роль (убывание)
+	}
+
+	statuses := []string{
+		"ACTIVE",   // пользователь активен
+		"INACTIVE", // пользователь неактивен
+	}
+
+	// defaults
+	if requestStruct.PageCurrent == 0 {
+		requestStruct.PageCurrent = 1
+	}
+	if requestStruct.PageSize == 0 {
+		requestStruct.PageSize = 100
+	}
+	if requestStruct.Status != "" && !stringInSlice(statuses, requestStruct.Status) {
+		return XMLResponseUserGetList{}, fmt.Errorf("allowed statuses: %s", strings.Join(statuses, ", "))
+	}
+	if requestStruct.SortType != "" && !stringInSlice(sortTypes, requestStruct.SortType) {
+		return XMLResponseUserGetList{}, fmt.Errorf("allowed sort types: %s", strings.Join(sortTypes, ", "))
+	}
+
+	responseStruct := new(XMLResponseUserGetList)
 
 	err := a.apiRequest(&requestStruct, responseStruct)
 	return *responseStruct, err

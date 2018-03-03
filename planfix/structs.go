@@ -151,7 +151,7 @@ type XMLRequestAnaliticField struct {
 	Value   interface{} `xml:"value"`
 }
 
-// XMLResponseUser - юзер в ответе user.get
+// XMLResponseUser - юзер в ответе user.get, user.getList
 // TODO: добавить все поля из https://planfix.ru/docs/ПланФикс_API_user.get
 type XMLResponseUser struct {
 	ID       int    `xml:"id"`
@@ -322,4 +322,27 @@ type XMLRequestUserGet struct {
 type XMLResponseUserGet struct {
 	XMLName xml.Name        `xml:"response"`
 	User    XMLResponseUser `xml:"user"`
+}
+
+// XMLRequestUserGetList - запрос user.getList
+type XMLRequestUserGetList struct {
+	XMLRequestAuth
+	XMLName xml.Name `xml:"request"`
+
+	Status      string `xml:"status,omitempty"`
+	OnlyOnline  int    `xml:"onlyOnline,omitempty"`
+	UserGroupID int    `xml:"userGoup>id,omitempty"`
+	SortType    string `xml:"sortType,omitempty"`
+	PageCurrent int    `xml:"pageCurrent,omitempty"`
+	PageSize    int    `xml:"pageSize,omitempty"`
+}
+
+// XMLResponseUserGetList - ответ user.getList
+type XMLResponseUserGetList struct {
+	XMLName xml.Name `xml:"response"`
+	Users   struct {
+		UsersCount      int               `xml:"count,attr"`
+		UsersTotalCount int               `xml:"totalCount,attr"`
+		Users           []XMLResponseUser `xml:"user"`
+	} `xml:"users"`
 }
