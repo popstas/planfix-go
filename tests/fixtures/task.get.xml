@@ -82,9 +82,20 @@
                     <name>Станислав Попов</name>
                 </user>
             </users>
+            <groups>
+                <group>
+                    <id>4717</id>
+                    <name>Программисты</name>
+                </group>
+            </groups>
         </workers>
-        <auditors/>
         <members>
+            <users>
+                <user>
+                    <id>9230</id>
+                    <name>Станислав Попов</name>
+                </user>
+            </users>
             <groups>
                 <group>
                     <id>4717</id>
@@ -92,5 +103,19 @@
                 </group>
             </groups>
         </members>
+        <auditors>
+            <users>
+                <user>
+                    <id>9230</id>
+                    <name>Станислав Попов</name>
+                </user>
+            </users>
+            <groups>
+                <group>
+                    <id>4717</id>
+                    <name>Программисты</name>
+                </group>
+            </groups>
+        </auditors>
     </task>
 </response>
