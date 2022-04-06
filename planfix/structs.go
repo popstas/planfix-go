@@ -123,12 +123,40 @@ type XMLResponseAction struct {
 // XMLResponseTask - задача в ответе task.get
 // TODO: добавить все поля из https://planfix.ru/docs/ПланФикс_API_task.get
 type XMLResponseTask struct {
-	ID           int    `xml:"id"`
-	Title        string `xml:"title"`
-	Description  string `xml:"description"`
-	General      int    `xml:"general"`
-	ProjectID    int    `xml:"project>id"`
-	ProjectTitle string `xml:"project>title"`
+	ID             int               `xml:"id"`
+	Title          string            `xml:"title"`
+	Description    string            `xml:"description"`
+	General        int               `xml:"general"`
+	ProjectID      int               `xml:"project>id"`
+	ProjectTitle   string            `xml:"project>title"`
+	OwnerId        int               `xml:"owner>id"`
+	ParentId       int               `xml:"parent>id"`
+	TemplateId     int               `xml:"template>id"`
+	WorkersUsers   UsersList         `xml:"workers>users,omitempty"`
+	WorkersGroups  GroupsList        `xml:"workers>groups,omitempty"`
+	MembersUsers   UsersList         `xml:"members>users,omitempty"`
+	MembersGroups  GroupsList        `xml:"members>groups,omitempty"`
+	AuditorsUsers  UsersList         `xml:"auditors>users,omitempty"`
+	AuditorsGroups GroupsList        `xml:"auditors>groups,omitempty"`
+	CustomValues   []TaskCustomValue `xml:"customData>customValue,omitempty"`
+}
+
+type TaskCustomValue struct {
+	Field IdName      `xml:"field"`
+	Value interface{} `xml:"value,omitempty"`
+	Text  string      `xml:"text"`
+}
+
+type UsersList struct {
+	Users []IdName `xml:"user"`
+}
+type GroupsList struct {
+	Groups []IdName `xml:"group"`
+}
+
+type IdName struct {
+	ID   int    `xml:"id"`
+	Name string `xml:"name,omitempty"`
 }
 
 // XMLResponseAnalitic - аналитика в ответе analitic.getList
@@ -149,6 +177,12 @@ type XMLRequestActionAnalitic struct {
 type XMLRequestAnaliticField struct {
 	FieldID int         `xml:"fieldId"`
 	Value   interface{} `xml:"value"`
+}
+
+// XMLRequestAnaliticTimePeriodValue - поле аналитики с типом `TIMEPERIOD` в запросе на добавление действия analitic.add
+type XMLRequestAnaliticTimePeriodValue struct {
+	Begin string `xml:"begin"`
+	End   string `xml:"end"`
 }
 
 // XMLResponseUser - юзер в ответе user.get, user.getList
